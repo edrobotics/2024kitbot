@@ -18,17 +18,26 @@ public class TankDrive extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftStickX = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_X);
-    double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_Y);
-    //double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_STICK_Y);
+    // GTA-style driving controls:
+    // - Right trigger (RT) = accelerate forward
+    // - Left trigger (LT) = brake/reverse
+    // - Left joystick X = steering
+    double steering = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_X);
+    double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_TRIGGER);
+    double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_TRIGGER);
 
-    Robot.driveTrain.setLeftMotors(leftStickY-leftStickX);
-    Robot.driveTrain.setRightMotors(leftStickY+leftStickX);
+    // Calculate speed: RT accelerates, LT brakes/reverses
+    double speed = rightTrigger - leftTrigger;
+
+    // Apply arcade drive: speed with steering differential
+    Robot.driveTrain.setLeftMotors(speed - steering);
+    Robot.driveTrain.setRightMotors(speed + steering);
   }
 
   // Called once the command ends or is interrupted.
