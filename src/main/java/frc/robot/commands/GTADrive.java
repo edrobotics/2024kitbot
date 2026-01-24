@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class TankDrive extends Command {
-  public TankDrive() {
+public class GTADrive extends Command {
+  public GTADrive() {
     addRequirements(Robot.driveTrain);
   }
   // Called when the command is initially scheduled.
@@ -24,12 +24,16 @@ public class TankDrive extends Command {
     // - Right trigger (RT) = accelerate forward
     // - Left trigger (LT) = brake/reverse
     // - Left joystick X = steering
-    double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_Y);
-    double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_STICK_Y);
+    double steering = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_X);
+    double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_TRIGGER);
+    double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_TRIGGER);
 
+    // Calculate speed: RT accelerates, LT brakes/reverses
+    double speed = rightTrigger - leftTrigger;
+    
     // Apply arcade drive: speed with steering differential
-    Robot.driveTrain.setLeftMotors(leftStickY);
-    Robot.driveTrain.setRightMotors(rightStickY);
+    Robot.driveTrain.setLeftMotors(speed - steering);
+    Robot.driveTrain.setRightMotors(speed + steering);
   }
 
   // Called once the command ends or is interrupted.

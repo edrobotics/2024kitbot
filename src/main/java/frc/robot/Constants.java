@@ -22,6 +22,7 @@ public final class Constants {
   public static final int LEFT_TRIGGER = 2;
   public static final int RIGHT_TRIGGER = 3;
   // Left joystick axes
-  public static final int LEFT_STICK_Y = 1;
   public static final int LEFT_STICK_X = 0;
+  public static final int LEFT_STICK_Y = 1;
+  public static final int RIGHT_STICK_Y = 5;
 }
