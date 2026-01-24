@@ -26,6 +26,7 @@ public class DriveTrain extends SubsystemBase {
     speed = Math.max(-1, Math.min(1, speed));
     leftMotor1.set(speed*Constants.speedReduction);
     leftMotor2.set(speed*Constants.speedReduction);
+    //System.out.println(new java.util.Date().getTime());
   }
   public void setRightMotors(double speed) {
     speed = Math.max(-1, Math.min(1, speed));
