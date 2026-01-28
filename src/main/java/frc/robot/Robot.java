@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_oi = new OI();
 
-    driveTrain.setDefaultCommand(new TankDrive());
+    driveTrain.setDefaultCommand(new GTADrive());
 
     publisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose3d.struct).publish();

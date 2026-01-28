@@ -29,7 +29,7 @@ public class GTADrive extends Command {
     double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_TRIGGER);
 
     // Calculate speed: RT accelerates, LT brakes/reverses
-    double speed = rightTrigger - leftTrigger;
+    double speed = (leftTrigger-rightTrigger)/2;
     
     // Apply arcade drive: speed with steering differential
     Robot.driveTrain.setLeftMotors(speed - steering);
