@@ -5,31 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class TankDrive extends Command {
-  public TankDrive() {
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class Auto extends Command {
+  /** Creates a new Auto. */
+  public Auto() {
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.driveTrain);
   }
+
+  private long startTime = 0;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //int startTime = new java.util.Date().getTime();
+    startTime = new java.util.Date().getTime();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // GTA-style driving controls:
-    // - Right trigger (RT) = accelerate forward
-    // - Left trigger (LT) = brake/reverse
-    // - Left joystick X = steering
-    double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_Y);
-    double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_STICK_Y);
-
-    // Apply arcade drive: speed with steering differential
-    Robot.driveTrain.setLeftMotors(leftStickY);
-    Robot.driveTrain.setRightMotors(rightStickY);
+    long currentTime = new java.util.Date().getTime();
+    if(currentTime-startTime < 3000) {
+      Robot.driveTrain.setLeftMotors(0.5);
+      Robot.driveTrain.setRightMotors(0.5);
+    }
+    else {
+      Robot.driveTrain.setLeftMotors(0);
+      Robot.driveTrain.setRightMotors(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
