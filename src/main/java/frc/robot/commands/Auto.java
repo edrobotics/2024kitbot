@@ -4,49 +4,76 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+// autonomous using pathplanner
+// create paths in the pathplanner app and put them in deploy/pathplanner/paths/
 public class Auto extends Command {
-  /** Creates a new Auto. */
+  private Command pathCommand = null;
+
+  // change this to match your path file name
+  private static final String PATH_NAME = "ExamplePath";
+
   public Auto() {
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.driveTrain);
   }
 
-  private long startTime = 0;
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //int startTime = new java.util.Date().getTime();
-    startTime = new java.util.Date().getTime();
+    try {
+      PathPlannerPath path = PathPlannerPath.fromPathFile(PATH_NAME);
+      pathCommand = AutoBuilder.followPath(path);
+      pathCommand.initialize();
+    } catch (Exception e) {
+      DriverStation.reportError("couldn't load path '" + PATH_NAME + "': " + e.getMessage(), e.getStackTrace());
+      // fallback - just drive forward
+      pathCommand = createFallbackAuto();
+      pathCommand.initialize();
+    }
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    long currentTime = new java.util.Date().getTime();
-    if(currentTime-startTime < 3000) {
-      Robot.driveTrain.setLeftMotors(0.5);
-      Robot.driveTrain.setRightMotors(0.5);
-    }
-    else {
-      Robot.driveTrain.setLeftMotors(0);
-      Robot.driveTrain.setRightMotors(0);
+    if (pathCommand != null) {
+      pathCommand.execute();
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Robot.driveTrain.setLeftMotors(0);
-    Robot.driveTrain.setRightMotors(0);
+    if (pathCommand != null) {
+      pathCommand.end(interrupted);
+    }
+    Robot.driveTrain.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return pathCommand != null && pathCommand.isFinished();
+  }
+
+  // backup auto if path file is missing - just drives forward for 2 sec
+  private Command createFallbackAuto() {
+    return Commands.run(
+        () -> Robot.driveTrain.arcadeDrive(0.3, 0),
+        Robot.driveTrain).withTimeout(2.0).andThen(
+            Commands.runOnce(() -> Robot.driveTrain.stop()));
+  }
+
+  // helper for auto chooser in robotcontainer
+  public static Command getAutoCommand(String pathName) {
+    try {
+      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+      return AutoBuilder.followPath(path);
+    } catch (Exception e) {
+      DriverStation.reportError("couldn't load path: " + pathName, e.getStackTrace());
+      return Commands.none();
+    }
   }
 }
