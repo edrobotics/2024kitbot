@@ -5,42 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Constants;
 
-public class TankDrive extends Command {
-  public TankDrive() {
-    addRequirements(Robot.driveTrain);
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class PickUpFuel extends Command {
+  public PickUpFuel() {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(Robot.intake);
   }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(Constants.controllerType == "ps4") {
-      double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftStickY);
-      double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.ps4_rightStickY);
-  
-      Robot.driveTrain.setLeftMotors(leftStickY);
-      Robot.driveTrain.setRightMotors(rightStickY);
+      boolean circleButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_circleButton);
+      Robot.intake.setIntakeMotor(circleButton ? -1 : 0);
     }
     else if(Constants.controllerType == "logitech") {
-      double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickY);
-      double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.logitech_rightStickY);
-
-      Robot.driveTrain.setLeftMotors(leftStickY);
-      Robot.driveTrain.setRightMotors(rightStickY);
+      boolean buttonB = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonB);
+      Robot.intake.setIntakeMotor(buttonB ? -1 : 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Robot.driveTrain.setLeftMotors(0);
-    Robot.driveTrain.setRightMotors(0);
+    Robot.intake.setIntakeMotor(0);
   }
 
   // Returns true when the command should end.

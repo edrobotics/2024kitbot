@@ -20,20 +20,26 @@ public class GTADrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // GTA-style driving controls:
-    // - Right trigger (RT) = accelerate forward
-    // - Left trigger (LT) = brake/reverse
-    // - Left joystick X = steering
-    double steering = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_STICK_X);
-    double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.RIGHT_TRIGGER);
-    double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.LEFT_TRIGGER);
+    if(Constants.controllerType == "ps4")
+    {
+      double steering = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftStickX);
+      double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftTrigger);
+      double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_rightTrigger);
+      double speed = leftTrigger-rightTrigger;
 
-    // Calculate speed: RT accelerates, LT brakes/reverses
-    double speed = (leftTrigger-rightTrigger)/2;
-    
-    // Apply arcade drive: speed with steering differential
-    Robot.driveTrain.setLeftMotors(speed - steering);
-    Robot.driveTrain.setRightMotors(speed + steering);
+      Robot.driveTrain.setLeftMotors(speed+steering);
+      Robot.driveTrain.setRightMotors(speed-steering);
+    }
+    else if(Constants.controllerType == "logitech")
+    {
+      double steering = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickX);
+      double leftTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_leftTrigger) ? 1 : 0;
+      double rightTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_rightTrigger) ? 1 : 0;
+      double speed = leftTrigger-rightTrigger;
+
+      Robot.driveTrain.setLeftMotors(speed+steering);
+      Robot.driveTrain.setRightMotors(speed-steering);
+    }
   }
 
   // Called once the command ends or is interrupted.

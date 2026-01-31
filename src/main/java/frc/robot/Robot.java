@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
+import frc.robot.commands.PickUpFuel;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -23,6 +25,7 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
+  public static Intake intake = new Intake();
   public static OI m_oi;
 
   private Pose3d poseA = new Pose3d();
@@ -43,6 +46,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     driveTrain.setDefaultCommand(new GTADrive());
+    intake.setDefaultCommand(new PickUpFuel());
 
     publisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose3d.struct).publish();
