@@ -23,9 +23,10 @@ public class GTADrive extends Command {
     if(Constants.controllerType == "ps4")
     {
       double steering = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftStickX);
+      steering = steering*Math.abs(steering);
       double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftTrigger);
       double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_rightTrigger);
-      double speed = leftTrigger-rightTrigger;
+      double speed = (rightTrigger-leftTrigger)/2;
 
       Robot.driveTrain.setLeftMotors(speed+steering);
       Robot.driveTrain.setRightMotors(speed-steering);
@@ -35,7 +36,7 @@ public class GTADrive extends Command {
       double steering = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickX);
       double leftTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_leftTrigger) ? 1 : 0;
       double rightTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_rightTrigger) ? 1 : 0;
-      double speed = leftTrigger-rightTrigger;
+      double speed = rightTrigger-leftTrigger;
 
       Robot.driveTrain.setLeftMotors(speed+steering);
       Robot.driveTrain.setRightMotors(speed-steering);

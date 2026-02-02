@@ -22,15 +22,25 @@ public final class Constants {
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
-  public static final String controllerType = "logitech"; //"logitech" or "ps4"
+  public static final String controllerType = "ps4"; //"logitech" or "ps4"
   public static final int CONTROL_1_ID = 0;
   //For a ps4 controller:
   public static final int ps4_leftStickX = 0;
   public static final int ps4_leftStickY = 1;
+  public static final int ps4_rightStickX = 2;
   public static final int ps4_leftTrigger = 3;
   public static final int ps4_rightTrigger = 4;
   public static final int ps4_rightStickY = 5;
-  public static final int ps4_circleButton = 3;
+  public static final int ps4_buttonSquare = 1;
+  public static final int ps4_buttonX = 2;
+  public static final int ps4_buttonCircle = 3;
+  public static final int ps4_buttonTriangle = 4;
+  public static final int ps4_buttonL1 = 5;
+  public static final int ps4_buttonR1 = 6;
+  public static final int ps4_buttonL2 = 7;
+  public static final int ps4_buttonR2 = 8;
+  public static final int ps4_buttonShare = 9;
+  public static final int ps4_buttonOptions = 10;
   //For a logitech controller:
   public static final int logitech_leftStickX = 0;
   public static final int logitech_leftStickY = 1;
