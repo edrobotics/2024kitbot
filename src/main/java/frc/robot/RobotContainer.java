@@ -7,6 +7,8 @@ package frc.robot;
 // import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ClimbCommand;
  
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,14 +18,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
- 
+  private final CommandXboxController driver = new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
   }
  
-  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -34,6 +36,18 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Simplified: Test all buttons 1-14 every cycle
+    SmartDashboard.putBoolean("Testing", true);
+    
+    // Try button 4 for up
+    /*new Trigger(() -> driver.getHID().getRawButton(4))
+        .onTrue(new edu.wpi.first.wpilibj2.command.InstantCommand(() -> System.out.println("BUTTON 4 PRESSED")))
+        .whileTrue(new ClimbCommand(Robot.climb, 0.6));
+    
+    // Try button 5 for down
+    new Trigger(() -> driver.getHID().getRawButton(5))
+        .onTrue(new edu.wpi.first.wpilibj2.command.InstantCommand(() -> System.out.println("BUTTON 5 PRESSED")))
+        .whileTrue(new ClimbCommand(Robot.climb, -0.6));*/
   }
  
   /**

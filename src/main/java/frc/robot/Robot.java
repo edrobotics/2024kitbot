@@ -15,8 +15,10 @@ import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
+import frc.robot.commands.ClimbCommand; 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -26,6 +28,7 @@ import frc.robot.subsystems.Intake;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static Intake intake = new Intake();
+  public static ClimbSubsystem climb = new ClimbSubsystem();
   public static OI m_oi;
 
   private Pose3d poseA = new Pose3d();
@@ -47,6 +50,8 @@ public class Robot extends TimedRobot {
 
     driveTrain.setDefaultCommand(new GTADrive());
     intake.setDefaultCommand(new PickUpFuel());
+    climb.setDefaultCommand(new ClimbCommand());
+  
 
     publisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose3d.struct).publish();
