@@ -34,8 +34,8 @@ public class GTADrive extends Command {
     else if(Constants.controllerType == "logitech")
     {
       double steering = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickX);
-      double leftTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_leftTrigger) ? 1 : 0;
-      double rightTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_rightTrigger) ? 1 : 0;
+      double leftTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonLT) ? 1 : 0;
+      double rightTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonRT) ? 1 : 0;
       double speed = rightTrigger-leftTrigger;
 
       Robot.driveTrain.setLeftMotors(speed+steering);

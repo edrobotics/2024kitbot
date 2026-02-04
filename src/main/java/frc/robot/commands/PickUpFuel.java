@@ -24,11 +24,13 @@ public class PickUpFuel extends Command {
   public void execute() {
     if(Constants.controllerType == "ps4") {
       boolean circleButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonCircle);
-      Robot.intake.setIntakeMotor(circleButton ? -1 : 0);
+      boolean squareButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonSquare);
+      Robot.intake.setIntakeMotor(circleButton ^ squareButton ? (circleButton ? -1 : 1) : 0);
     }
     else if(Constants.controllerType == "logitech") {
       boolean buttonB = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonB);
-      Robot.intake.setIntakeMotor(buttonB ? 1 : 0);
+      boolean buttonX = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonX);
+      Robot.intake.setIntakeMotor(buttonB ^ buttonX ? (buttonB ? 1 : -1) : 0);
     }
   }
 

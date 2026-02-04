@@ -22,7 +22,7 @@ public final class Constants {
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
-  public static final String controllerType = "ps4"; //"logitech" or "ps4"
+  public static final String controllerType = "logitech"; //"logitech" or "ps4"
   public static final int CONTROL_1_ID = 0;
   //For a ps4 controller:
   public static final int ps4_leftStickX = 0;
@@ -41,15 +41,25 @@ public final class Constants {
   public static final int ps4_buttonR2 = 8;
   public static final int ps4_buttonShare = 9;
   public static final int ps4_buttonOptions = 10;
+  public static final int ps4_buttonLeftStick = 11;
+  public static final int ps4_buttonRightStick = 12;
+  public static final int ps4_buttonPS = 13;
+  public static final int ps4_buttonTouchpad = 14;
   //For a logitech controller:
   public static final int logitech_leftStickX = 0;
   public static final int logitech_leftStickY = 1;
   public static final int logitech_rightStickX = 2;
   public static final int logitech_rightStickY = 3;
-  public static final int logitech_buttonX = 0;
-  public static final int logitech_buttonA = 1;
+  public static final int logitech_buttonX = 1;
+  public static final int logitech_buttonA = 2;
   public static final int logitech_buttonB = 3;
   public static final int logitech_buttonY = 4;
-  public static final int logitech_leftTrigger = 7;  //Note that this only counts as a button
-  public static final int logitech_rightTrigger = 8; //Note that this only counts as a button
+  public static final int logitech_buttonLB = 5;
+  public static final int logitech_buttonRB = 6;
+  public static final int logitech_buttonLT = 7; //Note that this only counts as a button
+  public static final int logitech_buttonRT = 8; //Note that this only counts as a button
+  public static final int logitech_buttonBack = 9;
+  public static final int logitech_buttonStart = 10;
+  public static final int logitech_buttonLeftStick = 11;
+  public static final int logitech_buttonRightStick = 12;
 }
