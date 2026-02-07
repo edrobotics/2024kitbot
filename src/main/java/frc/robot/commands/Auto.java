@@ -35,10 +35,11 @@ public class Auto extends Command {
       lastTime = 3000;
     }
     float degrees = 90;
-    if(currentTime-startTime >= 3000 && currentTime-startTime < 3000 + ((degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity))*1000) {
+    double timeToTurn = (degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity)*1000; // in milliseconds
+    if(currentTime-startTime >= 3000 && currentTime-startTime < 3000 + timeToTurn) {
       Robot.driveTrain.setLeftMotors(1);
       Robot.driveTrain.setRightMotors(-1);
-      lastTime = 3000 + ((degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity))*1000;
+      lastTime = 3000 + timeToTurn;
     }
     else if(currentTime-startTime > lastTime){
       Robot.driveTrain.setLeftMotors(0);
