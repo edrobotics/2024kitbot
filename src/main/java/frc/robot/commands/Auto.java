@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -26,12 +27,20 @@ public class Auto extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double lastTime = 0; // always set lastTime in the different time intervalls so the motors get turned off instantly once the autonomous commands have been run
     long currentTime = new java.util.Date().getTime();
     if(currentTime-startTime < 3000) {
       Robot.driveTrain.setLeftMotors(0.5);
       Robot.driveTrain.setRightMotors(0.5);
+      lastTime = 3000;
     }
-    else {
+    float degrees = 90;
+    if(currentTime-startTime >= 3000 && currentTime-startTime < 3000 + ((degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity))*1000) {
+      Robot.driveTrain.setLeftMotors(1);
+      Robot.driveTrain.setRightMotors(-1);
+      lastTime = 3000 + ((degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity))*1000;
+    }
+    else if(currentTime-startTime > lastTime){
       Robot.driveTrain.setLeftMotors(0);
       Robot.driveTrain.setRightMotors(0);
     }

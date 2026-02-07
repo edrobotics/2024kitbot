@@ -25,7 +25,7 @@ public class PickUpFuel extends Command {
     if(Constants.controllerType == "ps4") {
       boolean circleButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonCircle);
       boolean squareButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonSquare);
-      Robot.intake.setIntakeMotor(circleButton ^ squareButton ? (circleButton ? -1 : 1) : 0);
+      Robot.intake.setIntakeMotor(squareButton ^ circleButton ? (squareButton ? -1 : 1) : 0);
     }
     else if(Constants.controllerType == "logitech") {
       boolean buttonB = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonB);

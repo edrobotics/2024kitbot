@@ -12,10 +12,12 @@ public final class Constants {
   }
 
   //Drivetrain
-  public static final int LMOTOR1ID = 1;
+  public static final int LMOTOR1ID = 6;
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
+  public static final double wheelBaseWidth = 0.555; // in meters
+  public static final double leftWheelVelocity = 0.7; // in meters per second, this is in no way the correct velocity, just a rough estimate
   public static final double speedReduction = 0.6;
   
   // robot dimensions - measure these on your actual robot!
@@ -41,7 +43,7 @@ public final class Constants {
 
   //Intake
   public static final boolean intakeConnected = true;
-  public static final int intakeMotorId = 6;
+  public static final int intakeMotorId = 1;
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
@@ -97,4 +99,7 @@ public final class Constants {
   // button id used in RobotContainer for the climb (adjust to your joystick
   // mapping)
   public static final int CLIMB_BUTTON = 1;
+
+  //Autonomous
+  public static final long autonomousTime = 20000; // in milliseconds
 }
