@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import com.studica.frc.AHRS;
@@ -30,14 +33,18 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   // motors
-  private final SparkMax leftMotor1 = new SparkMax(Constants.LMOTOR1ID, MotorType.kBrushed);
-  private final SparkMax leftMotor2 = new SparkMax(Constants.LMOTOR2ID, MotorType.kBrushed);
-  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushed);
-  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
+  private final SparkMax leftMotor1 = new SparkMax(Constants.LMOTOR1ID, MotorType.kBrushless);
+  private final SparkMax leftMotor2 = new SparkMax(Constants.LMOTOR2ID, MotorType.kBrushless);
+  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
+  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
 
   // encoders - if using brushed motors you'll need external encoders instead
   private final RelativeEncoder leftEncoder = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
+  public double getPosition() {
+        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
+        return leftEncoder.getPosition();
+    }
 
   // navx gyro
   private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
@@ -50,11 +57,14 @@ public class DriveTrain extends SubsystemBase {
   private final Field2d field2d = new Field2d();
 
   public DriveTrain() {
-    // encoder config - uncomment if using neos
-    // leftEncoder.setPositionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    // leftEncoder.setVelocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
-    // rightEncoder.setPositionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    // rightEncoder.setVelocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+    //encoder config - uncomment if using neos
+    SparkMaxConfig config = new SparkMaxConfig();
+
+    config.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
+    config.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+
+    leftMotor1.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightMotor1.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     resetEncoders();
 
@@ -114,7 +124,7 @@ public class DriveTrain extends SubsystemBase {
 
   public void setLeftMotors(double speed) {
     speed = Math.max(-1, Math.min(1, speed));
-    //leftMotor1.set(-speed * Constants.speedReduction);
+    leftMotor1.set(-speed * Constants.speedReduction);
     leftMotor2.set(-speed * Constants.speedReduction);
   }
 
@@ -168,9 +178,11 @@ public class DriveTrain extends SubsystemBase {
     return leftEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
   }
 
+  
   public double getRightDistanceMeters() {
     return rightEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
   }
+  
 
   public void resetEncoders() {
     leftEncoder.setPosition(0);

@@ -12,16 +12,14 @@ public final class Constants {
   }
 
   //Drivetrain
-  public static final int LMOTOR1ID = 6;
+  public static final int LMOTOR1ID = 1;
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double wheelBaseWidth = 0.555; // in meters
-  public static final double leftWheelVelocity = 0.7; // in meters per second, this is in no way the correct velocity, just a rough estimate
   public static final double speedReduction = 0.6;
   
   // robot dimensions - measure these on your actual robot!
-  public static final double TRACK_WIDTH_METERS = 0.55; // distance between wheel centers
+  public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
   public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
 
@@ -43,7 +41,9 @@ public final class Constants {
 
   //Intake
   public static final boolean intakeConnected = true;
-  public static final int intakeMotorId = 1;
+  public static final int intakeMotorId = 6;
+  public static final int leftIntakeMotorArmID = 7;
+  public static final int rightIntakeMotorArmID = 8;
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types

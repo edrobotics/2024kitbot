@@ -9,12 +9,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
+import frc.robot.commands.RotateMotorCommand;
 import frc.robot.commands.ClimbCommand; 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -50,8 +53,8 @@ public class Robot extends TimedRobot {
 
     driveTrain.setDefaultCommand(new GTADrive());
     intake.setDefaultCommand(new PickUpFuel());
+    intake.setDefaultCommand(new RotateMotorCommand());
     climb.setDefaultCommand(new ClimbCommand());
-  
 
     publisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose3d.struct).publish();
@@ -100,6 +103,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    // DriveTrain driveTrain = new DriveTrain(1); // CAN ID 1
   }
 
   /** This function is called periodically during autonomous. */
@@ -112,9 +116,11 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
   }
 
   /** This function is called periodically during operator control. */
@@ -122,8 +128,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //CommandScheduler.getInstance().schedule(new TankDrive());
     CommandScheduler.getInstance().run();
-  }
 
+    RotateMotorCommand rotate90 = new RotateMotorCommand(intake, 90, 1, 0.5);
+
+    boolean buttonTriangle = m_oi.GetDriverRawButton(Constants.ps4_buttonTriangle);
+
+    // schedule it to run
+    if(buttonTriangle) {
+    rotate90.schedule();
+    }
+  }
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.

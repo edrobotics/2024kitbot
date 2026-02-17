@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -33,13 +32,6 @@ public class Auto extends Command {
       Robot.driveTrain.setLeftMotors(0.5);
       Robot.driveTrain.setRightMotors(0.5);
       lastTime = 3000;
-    }
-    float degrees = 90;
-    double timeToTurn = (degrees*Constants.wheelBaseWidth*Math.PI)/(360*Constants.leftWheelVelocity)*1000; // in milliseconds
-    if(currentTime-startTime >= 3000 && currentTime-startTime < 3000 + timeToTurn) {
-      Robot.driveTrain.setLeftMotors(1);
-      Robot.driveTrain.setRightMotors(-1);
-      lastTime = 3000 + timeToTurn;
     }
     else if(currentTime-startTime > lastTime){
       Robot.driveTrain.setLeftMotors(0);
