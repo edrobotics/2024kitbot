@@ -7,26 +7,21 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Auto extends Command {
-  /** Creates a new Auto. */
   public Auto() {
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.driveTrain);
   }
 
   private long startTime = 0;
-  // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {
-    //int startTime = new java.util.Date().getTime();
     startTime = new java.util.Date().getTime();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double lastTime = 0; // always set lastTime in the different time intervalls so the motors get turned off instantly once the autonomous commands have been run
+    double lastTime = 0; // always set lastTime in the different time intervals so the motors get turned off instantly once the autonomous commands have been run
     long currentTime = new java.util.Date().getTime();
     if(currentTime-startTime < 3000) {
       Robot.driveTrain.setLeftMotors(0.5);

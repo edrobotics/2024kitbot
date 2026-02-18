@@ -6,22 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-/** Command that runs the climb motor while scheduled. */
+
 public class ClimbCommand extends Command {
 
   public ClimbCommand() {
     addRequirements(Robot.climb);
   }
-  /** Create a climb command with default speed 0.6. */
-  /*public ClimbCommand(ClimbSubsystem climb) {
-    this(climb, 0.6);
-  }
-
-  public ClimbCommand(ClimbSubsystem climb, double speed) {
-    this.climb = climb;
-    this.speed = speed;
-    addRequirements(climb);
-  }*/
 
   @Override
   public void execute() {
@@ -29,7 +19,6 @@ public class ClimbCommand extends Command {
     double speed = 0;
     if(pov == 0) { speed = 1; }
     else if(pov == 180) { speed = -1; }
-    //double speed = pov == 0 ? 1 : 
     Robot.climb.run(speed);
   }
 

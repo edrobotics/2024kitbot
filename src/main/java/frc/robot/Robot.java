@@ -24,11 +24,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeArms;
 import frc.robot.subsystems.ClimbSubsystem;
 
-/**
- * The methods in this class are called automatically corresponding to each mode, as described in
- * the TimedRobot documentation. If you change the name of this class or the package after creating
- * this project, you must also update the Main.java file in the project.
- */
+
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static Intake intake = new Intake();
@@ -45,11 +41,7 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand = new Auto();
 
-  
-  /**
-   * This function is ran when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  //Called when the robot is started
   public void robotInit() {
     m_oi = new OI();
 
@@ -71,13 +63,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
   }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
+  //Runs every 20 ms
   @Override
   public void robotPeriodic() {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
@@ -90,7 +76,6 @@ public class Robot extends TimedRobot {
     arrayPublisher.set(new Pose3d[] { poseA, poseB });
   }
 
-  /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {}
 
@@ -108,7 +93,7 @@ public class Robot extends TimedRobot {
     // DriveTrain driveTrain = new DriveTrain(1); // CAN ID 1
   }
 
-  /** This function is called periodically during autonomous. */
+  //Called periodically during autonomous
   @Override
   public void autonomousPeriodic() {}
 
@@ -125,27 +110,25 @@ public class Robot extends TimedRobot {
     
   }
 
-  /** This function is called periodically during operator control. */
+  //Called periodically during teleoperated
   @Override
   public void teleopPeriodic() {
-    //CommandScheduler.getInstance().schedule(new TankDrive());
     CommandScheduler.getInstance().run();
   }
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
+    // Cancels all running commands at the start of test mode
     CommandScheduler.getInstance().cancelAll();
   }
 
-  /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
 
-  /** This function is called once when the robot is first started up. */
+  //Called once when the robot is first started up
   @Override
   public void simulationInit() {}
 
-  /** This function is called periodically whilst in simulation. */
+  //Called periodically whilst in simulation
   @Override
   public void simulationPeriodic() {}
 }

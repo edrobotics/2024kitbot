@@ -12,12 +12,11 @@ public class GTADrive extends Command {
   public GTADrive() {
     addRequirements(Robot.driveTrain);
   }
-  // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(Constants.pilotControllerType == "ps4")
@@ -43,14 +42,12 @@ public class GTADrive extends Command {
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     Robot.driveTrain.setLeftMotors(0);
     Robot.driveTrain.setRightMotors(0);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

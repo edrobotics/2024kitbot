@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeArms extends SubsystemBase {
-  // brushless motors
   private SparkMax leftIntakeArmsMotor = new SparkMax(Constants.leftIntakeMotorArmID, MotorType.kBrushless);
   private SparkMax rightIntakeArmsMotor = new SparkMax(Constants.rightIntakeMotorArmID, MotorType.kBrushless);
 
@@ -43,11 +42,9 @@ public class IntakeArms extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
-  // Do NOT touch the following function unless it is needed. They make sure both the motors on the same side go in the same direction
+  // Do NOT touch the following function unless it is needed. It makes sure both the motors run in the same direction
   public void setIntakeArmsMotors(double speed) {
     leftIntakeArmsMotor.set(-speed);
     rightIntakeArmsMotor.set(speed);

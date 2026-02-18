@@ -11,15 +11,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  // brushed motors
   private SparkMax intakeMotor = new SparkMax(Constants.intakeMotorId, MotorType.kBrushed);
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
-  // Do NOT touch the following function unless it is needed. They make sure both the motors on the same side go in the same direction
   public void setIntakeMotor(double speed) {
     if(Constants.intakeConnected) {
       intakeMotor.set(speed);

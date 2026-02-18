@@ -17,27 +17,25 @@ public final class Constants {
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
   public static final double speedReduction = 0.6;
-  
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
   public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
-
+  // pathplanner pid - tune these later
+  public static final double DRIVE_KP = 2.0;
+  public static final double DRIVE_KI = 0.0;
+  public static final double DRIVE_KD = 0.0;
   // encoder stuff for neos
   public static final double GEARING = 8.45; // kitbot gearing
   public static final double ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / GEARING;
   public static final double ENCODER_VELOCITY_CONVERSION = ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
 
-  // pathplanner pid - tune these later
-  public static final double DRIVE_KP = 2.0;
-  public static final double DRIVE_KI = 0.0;
-  public static final double DRIVE_KD = 0.0;
-
-  // max speeds for auto
+  //Autonomous
   public static final double MAX_VELOCITY_MPS = 2.0;
   public static final double MAX_ACCELERATION_MPSS = 1.5;
   public static final double MAX_ANGULAR_VELOCITY_RAD = Math.PI;
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
+  public static final long autonomousTime = 20000; // in milliseconds
 
   //Intake
   public static final boolean intakeConnected = true;
@@ -45,9 +43,13 @@ public final class Constants {
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
 
+  //Climber
+  // set this to the CAN id (or other id) of your climb motor controller
+  public static final int CLIMB_MOTOR_ID = 5;
+
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
-  public static final String pilotControllerType = "ps4"; //"logitech" or "ps4"
+  public static final String pilotControllerType = "logitech"; //"logitech" or "ps4"
   public static final String copilotControllerType = "logitech"; //"logitech" or "ps4"
   public static final int CONTROL_PILOT_ID = 0;
   public static final int CONTROL_COPILOT_ID = 1;
@@ -95,11 +97,4 @@ public final class Constants {
   public static final int logitech_buttonStart = 10;
   public static final int logitech_buttonLeftStick = 11;
   public static final int logitech_buttonRightStick = 12;
-
-  // climb
-  // set this to the CAN id (or other id) of your climb motor controller
-  public static final int CLIMB_MOTOR_ID = 5;
-
-  //Autonomous
-  public static final long autonomousTime = 20000; // in milliseconds
 }

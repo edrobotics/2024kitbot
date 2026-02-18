@@ -10,11 +10,11 @@ public class IntakeArmsCommand extends Command {
     private boolean isRunning = false;
     private boolean shouldStart = true;
     private boolean wasPressed = false;
-    private boolean direction = true; // true for 90 degrees, false for -90 degrees
+    private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
     private double startPosition;
 
     public IntakeArmsCommand() {
-        addRequirements(Robot.intakeArms);
+      addRequirements(Robot.intakeArms);
     }
           
     @Override
@@ -31,8 +31,11 @@ public class IntakeArmsCommand extends Command {
           buttonIntakeArms = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonY);
         }
 
-        speed = direction ? Math.abs(speed) : -Math.abs(speed);
+        //Sets either positive or negative speed
+        speed = positiveDirection ? Math.abs(speed) : -Math.abs(speed);
+        //Used to know if the intake arm motors will be started during this scheduler run
         shouldStart = (buttonIntakeArms && !wasPressed && !isRunning);
+        //So that we can know during the next scheduler run if the button was pressed this time or not
         wasPressed = buttonIntakeArms;
         if (shouldStart) {
             isRunning = true;
@@ -41,20 +44,21 @@ public class IntakeArmsCommand extends Command {
         if (isRunning) {
             Robot.intakeArms.setIntakeArmsMotors(speed);
         }
-        if ((Math.abs(Robot.intakeArms.getPosition() - startPosition) >= Math.abs(targetDegrees / 360.0)) && ((Robot.intakeArms.getPosition() - startPosition) > 0) == direction) {
+        //Make so that the motors will stop next time
+        if ((Math.abs(Robot.intakeArms.getPosition() - startPosition) >= Math.abs(targetDegrees / 360.0)) && ((Robot.intakeArms.getPosition() - startPosition) > 0) == positiveDirection) {
             isRunning = false;
             Robot.intakeArms.stopIntakeArmsMotors();
-            direction = !direction; // toggle direction for next time
+            positiveDirection = !positiveDirection; // toggle direction for next time
         }
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+      return false;
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.intakeArms.stopIntakeArmsMotors();
+      Robot.intakeArms.stopIntakeArmsMotors();
     }
 }
