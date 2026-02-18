@@ -17,10 +17,11 @@ import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
-import frc.robot.commands.RotateMotorCommand;
+import frc.robot.commands.IntakeArmsCommand;
 import frc.robot.commands.ClimbCommand; 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeArms;
 import frc.robot.subsystems.ClimbSubsystem;
 
 /**
@@ -31,6 +32,7 @@ import frc.robot.subsystems.ClimbSubsystem;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static Intake intake = new Intake();
+  public static IntakeArms intakeArms = new IntakeArms();
   public static ClimbSubsystem climb = new ClimbSubsystem();
   public static OI m_oi;
 
@@ -53,7 +55,7 @@ public class Robot extends TimedRobot {
 
     driveTrain.setDefaultCommand(new GTADrive());
     intake.setDefaultCommand(new PickUpFuel());
-    intake.setDefaultCommand(new RotateMotorCommand());
+    intakeArms.setDefaultCommand(new IntakeArmsCommand());
     climb.setDefaultCommand(new ClimbCommand());
 
     publisher = NetworkTableInstance.getDefault()
@@ -128,15 +130,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //CommandScheduler.getInstance().schedule(new TankDrive());
     CommandScheduler.getInstance().run();
-
-    RotateMotorCommand rotate90 = new RotateMotorCommand(intake, 90, 1, 0.5);
-
-    boolean buttonTriangle = m_oi.GetDriverRawButton(Constants.ps4_buttonTriangle);
-
-    // schedule it to run
-    if(buttonTriangle) {
-    rotate90.schedule();
-    }
   }
   @Override
   public void testInit() {

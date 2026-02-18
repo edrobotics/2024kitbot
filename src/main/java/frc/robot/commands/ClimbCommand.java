@@ -25,7 +25,7 @@ public class ClimbCommand extends Command {
 
   @Override
   public void execute() {
-    int pov = Robot.m_oi.GetDriverPOV();
+    int pov = Robot.m_oi.GetCopilotPOV();
     double speed = 0;
     if(pov == 0) { speed = 1; }
     else if(pov == 180) { speed = -1; }

@@ -22,14 +22,14 @@ public class PickUpFuel extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.controllerType == "ps4") {
-      boolean circleButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonCircle);
-      boolean squareButton = Robot.m_oi.GetDriverRawButton(Constants.ps4_buttonSquare);
+    if(Constants.copilotControllerType == "ps4") {
+      boolean circleButton = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonCircle);
+      boolean squareButton = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonSquare);
       Robot.intake.setIntakeMotor(squareButton ^ circleButton ? (squareButton ? -1 : 1) : 0);
     }
-    else if(Constants.controllerType == "logitech") {
-      boolean buttonB = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonB);
-      boolean buttonX = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonX);
+    else if(Constants.copilotControllerType == "logitech") {
+      boolean buttonB = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonB);
+      boolean buttonX = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonX);
       Robot.intake.setIntakeMotor(buttonB ^ buttonX ? (buttonB ? 1 : -1) : 0);
     }
   }

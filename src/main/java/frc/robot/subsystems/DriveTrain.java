@@ -33,18 +33,18 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   // motors
-  private final SparkMax leftMotor1 = new SparkMax(Constants.LMOTOR1ID, MotorType.kBrushless);
-  private final SparkMax leftMotor2 = new SparkMax(Constants.LMOTOR2ID, MotorType.kBrushless);
-  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
-  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
+  private final SparkMax leftMotor1 = new SparkMax(Constants.LMOTOR1ID, MotorType.kBrushed);
+  private final SparkMax leftMotor2 = new SparkMax(Constants.LMOTOR2ID, MotorType.kBrushed);
+  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushed);
+  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
 
   // encoders - if using brushed motors you'll need external encoders instead
-  private final RelativeEncoder leftEncoder = leftMotor1.getEncoder();
+  /*private final RelativeEncoder leftEncoder = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
   public double getPosition() {
         // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
         return leftEncoder.getPosition();
-    }
+    }*/
 
   // navx gyro
   private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
@@ -175,24 +175,27 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getLeftDistanceMeters() {
-    return leftEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
+    return 0;
+    //return leftEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
   }
 
   
   public double getRightDistanceMeters() {
-    return rightEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
+    return 0;
+    //return rightEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
   }
   
 
   public void resetEncoders() {
-    leftEncoder.setPosition(0);
-    rightEncoder.setPosition(0);
+    /*leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);*/
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(
+    /*return new DifferentialDriveWheelSpeeds(
         leftEncoder.getVelocity() * Constants.ENCODER_VELOCITY_CONVERSION,
-        rightEncoder.getVelocity() * Constants.ENCODER_VELOCITY_CONVERSION);
+        rightEncoder.getVelocity() * Constants.ENCODER_VELOCITY_CONVERSION);*/
+    return new DifferentialDriveWheelSpeeds(0, 0);
   }
 
   public ChassisSpeeds getChassisSpeeds() {

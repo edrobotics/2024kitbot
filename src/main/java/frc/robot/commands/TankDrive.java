@@ -20,16 +20,16 @@ public class TankDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.controllerType == "ps4") {
-      double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftStickY);
-      double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.ps4_rightStickY);
+    if(Constants.pilotControllerType == "ps4") {
+      double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickY);
+      double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightStickY);
   
       Robot.driveTrain.setLeftMotors(leftStickY);
       Robot.driveTrain.setRightMotors(rightStickY);
     }
-    else if(Constants.controllerType == "logitech") {
-      double leftStickY = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickY);
-      double rightStickY = Robot.m_oi.GetDriverRawAxis(Constants.logitech_rightStickY);
+    else if(Constants.pilotControllerType == "logitech") {
+      double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickY);
+      double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_rightStickY);
 
       Robot.driveTrain.setLeftMotors(leftStickY);
       Robot.driveTrain.setRightMotors(rightStickY);

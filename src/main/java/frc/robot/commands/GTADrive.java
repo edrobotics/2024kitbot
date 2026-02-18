@@ -20,22 +20,22 @@ public class GTADrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Constants.controllerType == "ps4")
+    if(Constants.pilotControllerType == "ps4")
     {
-      double steering = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftStickX);
+      double steering = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickX);
       steering = steering*Math.abs(steering);
-      double leftTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_leftTrigger);
-      double rightTrigger = Robot.m_oi.GetDriverRawAxis(Constants.ps4_rightTrigger);
+      double leftTrigger = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftTrigger);
+      double rightTrigger = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightTrigger);
       double speed = (rightTrigger-leftTrigger)/2;
 
       Robot.driveTrain.setLeftMotors(speed+steering);
       Robot.driveTrain.setRightMotors(speed-steering);
     }
-    else if(Constants.controllerType == "logitech")
+    else if(Constants.pilotControllerType == "logitech")
     {
-      double steering = Robot.m_oi.GetDriverRawAxis(Constants.logitech_leftStickX);
-      double leftTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonLT) ? 1 : 0;
-      double rightTrigger = Robot.m_oi.GetDriverRawButton(Constants.logitech_buttonRT) ? 1 : 0;
+      double steering = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickX);
+      double leftTrigger = Robot.m_oi.GetPilotRawButton(Constants.logitech_buttonLT) ? 1 : 0;
+      double rightTrigger = Robot.m_oi.GetPilotRawButton(Constants.logitech_buttonRT) ? 1 : 0;
       double speed = rightTrigger-leftTrigger;
 
       Robot.driveTrain.setLeftMotors(speed+steering);

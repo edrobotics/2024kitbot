@@ -47,8 +47,11 @@ public final class Constants {
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
-  public static final String controllerType = "ps4"; //"logitech" or "ps4"
-  public static final int CONTROL_1_ID = 0;
+  public static final String pilotControllerType = "ps4"; //"logitech" or "ps4"
+  public static final String copilotControllerType = "logitech"; //"logitech" or "ps4"
+  public static final int CONTROL_PILOT_ID = 0;
+  public static final int CONTROL_COPILOT_ID = 1;
+
   //For a ps4 controller:
   public static final int ps4_leftStickX = 0;
   public static final int ps4_leftStickY = 1;
@@ -96,9 +99,6 @@ public final class Constants {
   // climb
   // set this to the CAN id (or other id) of your climb motor controller
   public static final int CLIMB_MOTOR_ID = 5;
-  // button id used in RobotContainer for the climb (adjust to your joystick
-  // mapping)
-  public static final int CLIMB_BUTTON = 1;
 
   //Autonomous
   public static final long autonomousTime = 20000; // in milliseconds

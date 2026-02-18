@@ -7,7 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class OI {
-  private XboxController driveControl1 = new XboxController(Constants.CONTROL_1_ID);
+  private XboxController pilotController = new XboxController(Constants.CONTROL_PILOT_ID);
+  private XboxController copilotController = new XboxController(Constants.CONTROL_COPILOT_ID);
 
   //GetDriverRawAxis gets the value of the given axis
   //  axis: 0 - left stick X, 1 - left stick Y, 2 - left trigger, 3 - right trigger, 4 - right stick X, 5 - right stick Y
@@ -18,13 +19,22 @@ public class OI {
   //GetDriverPOV gets the value of the D-pad
   //  returns -1 if not pressed, else the number of degrees (starting at 0 for up, going clockwise)
 
-  public double GetDriverRawAxis(int axis) {
-    return driveControl1.getRawAxis(axis);
+  public double GetPilotRawAxis(int axis) {
+    return pilotController.getRawAxis(axis);
   }
-  public boolean GetDriverRawButton(int button) {
-    return driveControl1.getRawButton(button);
+  public boolean GetPilotRawButton(int button) {
+    return pilotController.getRawButton(button);
   }
-  public int GetDriverPOV() {
-    return driveControl1.getPOV();
+  public int GetPilotPOV() {
+    return pilotController.getPOV();
+  }
+  public double GetCopilotRawAxis(int axis) {
+    return copilotController.getRawAxis(axis);
+  }
+  public boolean GetCopilotRawButton(int button) {
+    return copilotController.getRawButton(button);
+  }
+  public int GetCopilotPOV() {
+    return copilotController.getPOV();
   }
 }
