@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -43,6 +46,16 @@ public final class Constants {
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
+
+  // Vision / AprilTags
+  // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.
+  public static final String CAMERA_NAME = "front_camera";
+  // TODO: Measure the camera's position relative to the robot center (meters + radians).
+  //       Translation3d(forward, left, up), Rotation3d(roll, pitch, yaw).
+  public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(
+      new Translation3d(0.3, 0.0, 0.5),   // 30 cm forward, 50 cm up from center
+      new Rotation3d(0, Math.toRadians(-15), 0) // tilted 15° down
+  );
 
   //Climber
   // set this to the CAN id (or other id) of your climb motor controller
