@@ -19,7 +19,7 @@ public class GTADrive extends Command {
 
   @Override
   public void execute() {
-    if(Constants.pilotControllerType == "ps4")
+    if(Constants.pilotControllerType.equals("ps4"))
     {
       double steering = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickX);
       steering = steering*Math.abs(steering);
@@ -30,7 +30,7 @@ public class GTADrive extends Command {
       Robot.driveTrain.setLeftMotors(speed+steering);
       Robot.driveTrain.setRightMotors(speed-steering);
     }
-    else if(Constants.pilotControllerType == "logitech")
+    else if(Constants.pilotControllerType.equals("logitech"))
     {
       double steering = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickX);
       double leftTrigger = Robot.m_oi.GetPilotRawButton(Constants.logitech_buttonLT) ? 1 : 0;
@@ -44,8 +44,7 @@ public class GTADrive extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Robot.driveTrain.setLeftMotors(0);
-    Robot.driveTrain.setRightMotors(0);
+    Robot.driveTrain.stop();
   }
 
   @Override

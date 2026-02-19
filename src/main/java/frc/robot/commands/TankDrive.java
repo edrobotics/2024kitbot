@@ -19,14 +19,14 @@ public class TankDrive extends Command {
 
   @Override
   public void execute() {
-    if(Constants.pilotControllerType == "ps4") {
+    if(Constants.pilotControllerType.equals("ps4")) {
       double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickY);
       double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightStickY);
   
       Robot.driveTrain.setLeftMotors(leftStickY);
       Robot.driveTrain.setRightMotors(rightStickY);
     }
-    else if(Constants.pilotControllerType == "logitech") {
+    else if(Constants.pilotControllerType.equals("logitech")) {
       double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickY);
       double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_rightStickY);
 
@@ -37,8 +37,7 @@ public class TankDrive extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Robot.driveTrain.setLeftMotors(0);
-    Robot.driveTrain.setRightMotors(0);
+    Robot.driveTrain.stop();
   }
 
   @Override
