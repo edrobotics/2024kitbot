@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -38,8 +40,7 @@ public class Robot extends TimedRobot {
   private StructPublisher<Pose3d> publisher;
   private StructArrayPublisher<Pose3d> arrayPublisher;
 
-
-  private Command m_autonomousCommand = new Auto();
+  private Command m_autonomousCommand;
 
   //Called when the robot is started
   public void robotInit() {
@@ -85,12 +86,18 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // Only create a PathPlanner command if AutoBuilder was successfully configured
+    if (DriveTrain.isAutoBuilderConfigured()) {
+      m_autonomousCommand = new PathPlannerAuto("AutoA1");
+    } else {
+      SmartDashboard.putString("Auto Status", "AutoBuilder not configured - autonomous disabled");
+      m_autonomousCommand = null;
+    }
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    // DriveTrain driveTrain = new DriveTrain(1); // CAN ID 1
   }
 
   //Called periodically during autonomous

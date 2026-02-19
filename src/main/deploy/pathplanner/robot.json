@@ -1,0 +1,20 @@
+{
+  "mass": 50.0,
+  "wheelbase": 0.555,
+  "trackWidth": 0.555,
+  "wheelRadius": 0.0762,
+  "wheelCOF": 1.0,
+  "robotMass": 50.0,
+  "robotMOI": 6.0,
+  "driveMotorType": "NEO",
+  "driveCurrentLimit": 40.0,
+  "driveGearing": 8.45,
+  "driveMotorCount": 2,
+  "maxModuleSpeed": 2.0,
+  "maxVelocity": 2.0,
+  "maxAcceleration": 1.5,
+  "maxAngularVelocity": 3.14159,
+  "maxAngularAcceleration": 3.14159,
+  "driveType": "DIFFERENTIAL",
+  "holonomic": false
+}

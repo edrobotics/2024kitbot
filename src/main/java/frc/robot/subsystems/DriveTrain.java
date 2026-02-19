@@ -35,23 +35,31 @@ public class DriveTrain extends SubsystemBase {
 
   // ── Motor Controllers ──────────────────────────────────────────────────────
 
-  private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushed);
-  private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushed);
-  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushed);
-  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
+  private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushless);
+  private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushless);
+  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
+  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
 
   // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
   //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry,
   //       wire external quadrature encoders into the SparkMax encoder port and uncomment
   //       the block below. Then restore the encoder reads in getLeftDistanceMeters(),
   //       getRightDistanceMeters(), resetEncoders(), and getWheelSpeeds().
-  /*
+  
   private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
+  
+  // Simulated encoder values for PathPlanner in simulation
+  private double simulatedLeftDistance = 0;
+  private double simulatedRightDistance = 0;
+  
+  // Track whether PathPlanner was successfully configured
+  private static boolean autoBuilderConfigured = false;
+  
   public double getPosition() {
         // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
         return leftEncoder.getPosition();
-    }*/
+    }
 
   // ── Sensors ────────────────────────────────────────────────────────────────
 
@@ -113,17 +121,29 @@ public class DriveTrain extends SubsystemBase {
             return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
           },
           this);
+      autoBuilderConfigured = true;
+      DriverStation.reportWarning("PathPlanner AutoBuilder successfully configured", false);
     } catch (Exception e) {
       // PathPlanner requires a valid robot config JSON exported from the GUI.
       // A missing config file is expected and harmless during simulation.
+      autoBuilderConfigured = false;
       DriverStation.reportWarning("PathPlanner config failed: " + e.getMessage(), false);
     }
+  }
+  
+  public static boolean isAutoBuilderConfigured() {
+    return autoBuilderConfigured;
   }
 
   // ── Periodic ──────────────────────────────────────────────────────────────
 
   @Override
   public void periodic() {
+    // Integrate wheel speeds to update simulated distances
+    DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds();
+    simulatedLeftDistance += wheelSpeeds.leftMetersPerSecond * Constants.LOOP_PERIOD_SECONDS;
+    simulatedRightDistance += wheelSpeeds.rightMetersPerSecond * Constants.LOOP_PERIOD_SECONDS;
+    
     odometry.update(getHeading(), getLeftDistanceMeters(), getRightDistanceMeters());
     field2d.setRobotPose(getPose());
 
@@ -198,35 +218,34 @@ public class DriveTrain extends SubsystemBase {
   /** Returns the distance the left side has traveled in meters since the last encoder reset. */
   public double getLeftDistanceMeters() {
     // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
-    return 0;
-    // return leftEncoder.getPosition();
+    // For simulation, integrate wheel speeds over time to estimate distance
+    return simulatedLeftDistance;
   }
 
   /** Returns the distance the right side has traveled in meters since the last encoder reset. */
   public double getRightDistanceMeters() {
     // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
-    return 0;
-    // return rightEncoder.getPosition();
+    // For simulation, integrate wheel speeds over time to estimate distance
+    return simulatedRightDistance;
   }
 
   /** Resets both drive encoders to zero. */
   public void resetEncoders() {
     // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
-    /*
+    
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
-    */
+    
   }
 
   /** Returns the current wheel speeds in meters per second. */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
-    /*
-    return new DifferentialDriveWheelSpeeds(
-        leftEncoder.getVelocity(),
-        rightEncoder.getVelocity());
-    */
-    return new DifferentialDriveWheelSpeeds(0, 0);
+    // For simulation, derive wheel speeds from motor outputs scaled to max velocity
+    double leftSpeed = -leftMotor1.get() * Constants.MAX_VELOCITY_MPS;
+    double rightSpeed = rightMotor1.get() * Constants.MAX_VELOCITY_MPS;
+    
+    return new DifferentialDriveWheelSpeeds(leftSpeed, rightSpeed);
   }
 
   /** Returns the current chassis speeds derived from wheel speeds. */
