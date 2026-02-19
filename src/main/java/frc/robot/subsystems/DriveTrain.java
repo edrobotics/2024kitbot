@@ -41,17 +41,17 @@ public class DriveTrain extends SubsystemBase {
   private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
 
   // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
-  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry,
-  //       wire external quadrature encoders into the SparkMax encoder port and uncomment
-  //       the block below. Then restore the encoder reads in getLeftDistanceMeters(),
-  //       getRightDistanceMeters(), resetEncoders(), and getWheelSpeeds().
+  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry:
+  //       1. Wire external quadrature encoders into the SparkMax encoder ports.
+  //       2. Uncomment the two encoder fields below.
+  //       3. Restore encoder reads in getLeftDistanceMeters(), getRightDistanceMeters(),
+  //          resetEncoders(), and getWheelSpeeds().
+  //       4. (Optional) Once a VisionSubsystem is providing AprilTag poses, feed them
+  //          into a DifferentialDrivePoseEstimator to fuse vision + wheel odometry.
   /*
   private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
-  public double getPosition() {
-        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-        return leftEncoder.getPosition();
-    }*/
+  */
 
   // ── Gyro (NavX) ──────────────────────────────────────────────────────────
   // The gyro is accessed exclusively through getHeading(), getRotation2d(),
