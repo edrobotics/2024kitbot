@@ -41,10 +41,13 @@ public class DriveTrain extends SubsystemBase {
   private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
 
   // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
-  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry,
-  //       wire external quadrature encoders into the SparkMax encoder port and uncomment
-  //       the block below. Then restore the encoder reads in getLeftDistanceMeters(),
-  //       getRightDistanceMeters(), resetEncoders(), and getWheelSpeeds().
+  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry:
+  //       1. Wire external quadrature encoders into the SparkMax encoder ports.
+  //       2. Uncomment the two encoder fields below.
+  //       3. Restore encoder reads in getLeftDistanceMeters(), getRightDistanceMeters(),
+  //          resetEncoders(), and getWheelSpeeds().
+  //       4. (Optional) Once a VisionSubsystem is providing AprilTag poses, feed them
+  //          into a DifferentialDrivePoseEstimator to fuse vision + wheel odometry.
   
   private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
@@ -61,9 +64,12 @@ public class DriveTrain extends SubsystemBase {
         return leftEncoder.getPosition();
     }
 
-  // ── Sensors ────────────────────────────────────────────────────────────────
+  // ── Gyro (NavX) ──────────────────────────────────────────────────────────
+  // The gyro is accessed exclusively through getHeading(), getRotation2d(),
+  // and zeroHeading(). To swap to a different gyro (e.g. Pigeon2) or extract
+  // into a standalone GyroSubsystem, replace this field and update those three
+  // methods — no other code references the navx directly.
 
-  // NavX is connected via the MXP SPI port on the RoboRIO.
   private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
 
   // ── Kinematics & Odometry ──────────────────────────────────────────────────
@@ -213,6 +219,15 @@ public class DriveTrain extends SubsystemBase {
   /** Zeroes the NavX gyro. Call at match start or after a known-good heading is established. */
   public void zeroHeading() {
     navx.reset();
+  }
+
+  /**
+   * Returns the robot's current heading as a Rotation2d.
+   * Alias for {@link #getHeading()} — provided for API consistency with WPILib examples
+   * that expect a getRotation2d() method.
+   */
+  public Rotation2d getRotation2d() {
+    return getHeading();
   }
 
   /** Returns the distance the left side has traveled in meters since the last encoder reset. */

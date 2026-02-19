@@ -25,6 +25,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeArms;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 
 public class Robot extends TimedRobot {
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   public static Intake intake = new Intake();
   public static IntakeArms intakeArms = new IntakeArms();
   public static ClimbSubsystem climb = new ClimbSubsystem();
+  public static VisionSubsystem vision = new VisionSubsystem();
   public static OI m_oi;
 
   private Pose3d poseA = new Pose3d();

@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -37,16 +40,31 @@ public final class Constants {
   public static final double MAX_ANGULAR_VELOCITY_RAD = Math.PI;
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
   public static final long autonomousTime = 20000; // in milliseconds
+  public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
+  public static final double AUTO_DRIVE_SPEED = 0.5; // motor speed during auto drive
 
   //Intake
   public static final boolean intakeConnected = true;
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
+  public static final double INTAKE_ARMS_TARGET_DEGREES = 90; // rotation target per toggle
+  public static final double INTAKE_ARMS_SPEED = 0.5; // motor speed for intake arms
+
+  // Vision / AprilTags
+  // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.
+  public static final String CAMERA_NAME = "front_camera";
+  // TODO: Measure the camera's position relative to the robot center (meters + radians).
+  //       Translation3d(forward, left, up), Rotation3d(roll, pitch, yaw).
+  public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(
+      new Translation3d(0.3, 0.0, 0.5),   // 30 cm forward, 50 cm up from center
+      new Rotation3d(0, Math.toRadians(-15), 0) // tilted 15° down
+  );
 
   //Climber
-  // set this to the CAN id (or other id) of your climb motor controller
   public static final int CLIMB_MOTOR_ID = 5;
+  public static final double CLIMB_UP_SPEED = 1.0;
+  public static final double CLIMB_DOWN_SPEED = -1.0;
 
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
