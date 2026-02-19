@@ -31,6 +31,7 @@ public final class Constants {
   public static final double ENCODER_VELOCITY_CONVERSION = ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
 
   //Autonomous
+  public static final double LOOP_PERIOD_SECONDS = 0.02; // WPILib default scheduler period (20 ms)
   public static final double MAX_VELOCITY_MPS = 2.0;
   public static final double MAX_ACCELERATION_MPSS = 1.5;
   public static final double MAX_ANGULAR_VELOCITY_RAD = Math.PI;
