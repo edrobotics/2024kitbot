@@ -112,9 +112,7 @@ public class Robot extends TimedRobot {
 
   //Called periodically during teleoperated
   @Override
-  public void teleopPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
+  public void teleopPeriodic() {}
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode
