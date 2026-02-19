@@ -158,6 +158,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Robot Heading",  getHeading().getDegrees());
     SmartDashboard.putNumber("Left Distance",  getLeftDistanceMeters());
     SmartDashboard.putNumber("Right Distance", getRightDistanceMeters());
+    SmartDashboard.putNumber("Left Speed m/s", wheelSpeeds.leftMetersPerSecond);
+    SmartDashboard.putNumber("Right Speed m/s", wheelSpeeds.rightMetersPerSecond);
   }
 
   // ── Motor Control ──────────────────────────────────────────────────────────
@@ -195,6 +197,18 @@ public class DriveTrain extends SubsystemBase {
     // Normalize velocity to a [-1, 1] motor output using the configured max velocity.
     double leftOutput  = wheelSpeeds.leftMetersPerSecond  / Constants.MAX_VELOCITY_MPS;
     double rightOutput = wheelSpeeds.rightMetersPerSecond / Constants.MAX_VELOCITY_MPS;
+    
+    // Clamp outputs to valid motor range [-1, 1]
+    leftOutput = clamp(leftOutput);
+    rightOutput = clamp(rightOutput);
+    
+    // Log requested speeds for diagnostics
+    SmartDashboard.putNumber("PathPlanner Vx m/s", speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("PathPlanner Omega rad/s", speeds.omegaRadiansPerSecond);
+    SmartDashboard.putNumber("Wheel Left m/s", wheelSpeeds.leftMetersPerSecond);
+    SmartDashboard.putNumber("Wheel Right m/s", wheelSpeeds.rightMetersPerSecond);
+    SmartDashboard.putNumber("Left Motor Output", leftOutput);
+    SmartDashboard.putNumber("Right Motor Output", rightOutput);
 
     setRawOutputs(leftOutput, rightOutput);
   }
@@ -298,6 +312,8 @@ public class DriveTrain extends SubsystemBase {
    * Left motors are negated because they are physically mounted inverted relative to the right.
    */
   private void setRawOutputs(double leftOutput, double rightOutput) {
+    // Set motor outputs directly (already in [-1, 1] range and clamped)
+    // Left motors are negated because they're mounted backwards
     leftMotor1.set(-leftOutput);
     leftMotor2.set(-leftOutput);
     rightMotor1.set(rightOutput);

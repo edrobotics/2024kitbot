@@ -21,7 +21,7 @@ public final class Constants {
   public static final int RMOTOR2ID = 4;
   public static final double speedReduction = 0.6;
   // robot dimensions - measure these on your actual robot!
-  public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers
+  public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
   public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
   // pathplanner pid - tune these later
@@ -69,7 +69,7 @@ public final class Constants {
   //Controller
   //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
   public static final String pilotControllerType = "logitech"; //"logitech" or "ps4"
-  public static final String copilotControllerType = "logitech"; //"logitech" or "ps4"
+  public static final String copilotControllerType = "ps4"; //"logitech" or "ps4"
   public static final int CONTROL_PILOT_ID = 0;
   public static final int CONTROL_COPILOT_ID = 1;
 
