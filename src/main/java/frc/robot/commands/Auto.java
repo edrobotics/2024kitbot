@@ -16,29 +16,23 @@ public class Auto extends Command {
 
   @Override
   public void initialize() {
-    startTime = new java.util.Date().getTime();
+    startTime = System.currentTimeMillis();
   }
 
   @Override
   public void execute() {
-    double lastTime = 0; // always set lastTime in the different time intervals so the motors get turned off instantly once the autonomous commands have been run
-    long currentTime = new java.util.Date().getTime();
-    if(currentTime-startTime < 3000) {
+    long currentTime = System.currentTimeMillis();
+    if (currentTime - startTime < 3000) {
       Robot.driveTrain.setLeftMotors(0.5);
       Robot.driveTrain.setRightMotors(0.5);
-      lastTime = 3000;
-    }
-    else if(currentTime-startTime > lastTime){
-      Robot.driveTrain.setLeftMotors(0);
-      Robot.driveTrain.setRightMotors(0);
+    } else {
+      Robot.driveTrain.stop();
     }
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Robot.driveTrain.setLeftMotors(0);
-    Robot.driveTrain.setRightMotors(0);
+    Robot.driveTrain.stop();
   }
 
   // Returns true when the command should end.
