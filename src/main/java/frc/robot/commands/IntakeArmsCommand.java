@@ -5,8 +5,8 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class IntakeArmsCommand extends Command {
-    private double targetDegrees = 90;
-    private double speed = 0.5;
+    private double targetDegrees = Constants.INTAKE_ARMS_TARGET_DEGREES;
+    private double speed = Constants.INTAKE_ARMS_SPEED;
     private boolean isRunning = false;
     private boolean shouldStart = true;
     private boolean wasPressed = false;

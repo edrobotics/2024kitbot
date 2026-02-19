@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class Auto extends Command {
@@ -22,9 +23,9 @@ public class Auto extends Command {
   @Override
   public void execute() {
     long currentTime = System.currentTimeMillis();
-    if (currentTime - startTime < 3000) {
-      Robot.driveTrain.setLeftMotors(0.5);
-      Robot.driveTrain.setRightMotors(0.5);
+    if (currentTime - startTime < Constants.AUTO_DRIVE_TIME_MS) {
+      Robot.driveTrain.setLeftMotors(Constants.AUTO_DRIVE_SPEED);
+      Robot.driveTrain.setRightMotors(Constants.AUTO_DRIVE_SPEED);
     } else {
       Robot.driveTrain.stop();
     }
