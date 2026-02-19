@@ -4,11 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 
 public class OI {
-  private XboxController pilotController = new XboxController(Constants.CONTROL_PILOT_ID);
-  private XboxController copilotController = new XboxController(Constants.CONTROL_COPILOT_ID);
+  private GenericHID pilotController = new GenericHID(Constants.CONTROL_PILOT_ID);
+  private GenericHID copilotController = new GenericHID(Constants.CONTROL_COPILOT_ID);
 
   //GetDriverPOV gets the value of the D-pad
   //  returns -1 if not pressed, else the number of degrees (starting at 0 for up, going clockwise)
