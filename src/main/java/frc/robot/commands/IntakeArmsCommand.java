@@ -23,11 +23,10 @@ public class IntakeArmsCommand extends Command {
 
     @Override
     public void execute() {
-        boolean buttonIntakeArms;
-        if(Constants.copilotControllerType == "ps4") {
+        boolean buttonIntakeArms = false;
+        if (Constants.copilotControllerType.equals("ps4")) {
           buttonIntakeArms = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonTriangle);
-        }
-        else if(Constants.copilotControllerType == "logitech") {
+        } else if (Constants.copilotControllerType.equals("logitech")) {
           buttonIntakeArms = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonY);
         }
 
