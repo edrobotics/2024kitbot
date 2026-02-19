@@ -32,43 +32,57 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
-  // motors
-  private final SparkMax leftMotor1 = new SparkMax(Constants.LMOTOR1ID, MotorType.kBrushed);
-  private final SparkMax leftMotor2 = new SparkMax(Constants.LMOTOR2ID, MotorType.kBrushed);
+
+  // ── Motor Controllers ──────────────────────────────────────────────────────
+
+  private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushed);
+  private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushed);
   private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushed);
   private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
 
-  // encoders - if using brushed motors you'll need external encoders instead
-  /*private final RelativeEncoder leftEncoder = leftMotor1.getEncoder();
+  // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
+  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry,
+  //       wire external quadrature encoders into the SparkMax encoder port and uncomment
+  //       the block below. Then restore the encoder reads in getLeftDistanceMeters(),
+  //       getRightDistanceMeters(), resetEncoders(), and getWheelSpeeds().
+  /*
+  private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
   public double getPosition() {
         // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
         return leftEncoder.getPosition();
     }*/
 
-  // navx gyro
+  // ── Sensors ────────────────────────────────────────────────────────────────
+
+  // NavX is connected via the MXP SPI port on the RoboRIO.
   private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
 
-  // kinematics stuff
-  private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
+  // ── Kinematics & Odometry ──────────────────────────────────────────────────
+
+  private final DifferentialDriveKinematics kinematics =
+      new DifferentialDriveKinematics(Constants.TRACK_WIDTH_METERS);
   private final DifferentialDriveOdometry odometry;
 
-  // field viz for glass/shuffleboard
+  // Field visualization widget shown in Glass / Shuffleboard.
   private final Field2d field2d = new Field2d();
 
+  // ── Constructor ────────────────────────────────────────────────────────────
+
   public DriveTrain() {
-    //encoder config - uncomment if using neos
-    SparkMaxConfig config = new SparkMaxConfig();
+    // Configure encoder conversion factors on the leader motors so that position
+    // and velocity readings are already in meters / meters-per-second.
+    // TODO: This encoder config only takes effect when encoders are enabled (see TODO above).
+    SparkMaxConfig encoderConfig = new SparkMaxConfig();
+    encoderConfig.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
+    encoderConfig.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
 
-    config.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    config.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
-
-    leftMotor1.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    rightMotor1.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    leftMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     resetEncoders();
 
-    // start at origin
+    // Initialize odometry at the origin facing forward.
     odometry = new DifferentialDriveOdometry(
         getHeading(),
         getLeftDistanceMeters(),
@@ -80,6 +94,8 @@ public class DriveTrain extends SubsystemBase {
     configureAutoBuilder();
   }
 
+  // ── PathPlanner Setup ──────────────────────────────────────────────────────
+
   private void configureAutoBuilder() {
     try {
       RobotConfig config = RobotConfig.fromGUISettings();
@@ -89,125 +105,143 @@ public class DriveTrain extends SubsystemBase {
           this::resetOdometry,
           this::getChassisSpeeds,
           this::driveRobotRelative,
-          new PPLTVController(0.02),
+          new PPLTVController(Constants.LOOP_PERIOD_SECONDS),
           config,
           () -> {
-            // flip path for red alliance
+            // Mirror paths to the red alliance side of the field.
             var alliance = DriverStation.getAlliance();
             return alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red;
           },
           this);
     } catch (Exception e) {
-      DriverStation.reportWarning("PathPlanner config failed (normal in simulation): " + e.getMessage(), false);
+      // PathPlanner requires a valid robot config JSON exported from the GUI.
+      // A missing config file is expected and harmless during simulation.
+      DriverStation.reportWarning("PathPlanner config failed: " + e.getMessage(), false);
     }
   }
 
+  // ── Periodic ──────────────────────────────────────────────────────────────
+
   @Override
   public void periodic() {
-    // update position tracking
-    odometry.update(
-        getHeading(),
-        getLeftDistanceMeters(),
-        getRightDistanceMeters());
-
+    odometry.update(getHeading(), getLeftDistanceMeters(), getRightDistanceMeters());
     field2d.setRobotPose(getPose());
 
-    // logging
-    SmartDashboard.putNumber("Robot X", getPose().getX());
-    SmartDashboard.putNumber("Robot Y", getPose().getY());
-    SmartDashboard.putNumber("Robot Heading", getHeading().getDegrees());
-    SmartDashboard.putNumber("Left Distance", getLeftDistanceMeters());
+    SmartDashboard.putNumber("Robot X",        getPose().getX());
+    SmartDashboard.putNumber("Robot Y",        getPose().getY());
+    SmartDashboard.putNumber("Robot Heading",  getHeading().getDegrees());
+    SmartDashboard.putNumber("Left Distance",  getLeftDistanceMeters());
     SmartDashboard.putNumber("Right Distance", getRightDistanceMeters());
   }
 
-  // basic drive methods
+  // ── Motor Control ──────────────────────────────────────────────────────────
 
+  /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
-    speed = Math.max(-1, Math.min(1, speed));
+    speed = clamp(speed);
     leftMotor1.set(-speed * Constants.speedReduction);
     leftMotor2.set(-speed * Constants.speedReduction);
   }
 
+  /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
-    speed = Math.max(-1, Math.min(1, speed));
+    speed = clamp(speed);
     rightMotor1.set(speed * Constants.speedReduction);
     rightMotor2.set(speed * Constants.speedReduction);
   }
 
+  /** Arcade drive: xSpeed is forward/backward [-1, 1], rot is turn rate [-1, 1]. */
   public void arcadeDrive(double xSpeed, double rot) {
-    double leftSpeed = xSpeed + rot;
-    double rightSpeed = xSpeed - rot;
-    setLeftMotors(leftSpeed);
-    setRightMotors(rightSpeed);
+    setLeftMotors(xSpeed + rot);
+    setRightMotors(xSpeed - rot);
   }
 
-  // used by pathplanner
+  /**
+   * Drives the robot at the requested chassis speeds. Called by PathPlanner during autonomous.
+   * Bypasses the driver speed reduction so PathPlanner has full, unscaled authority over velocity.
+   *
+   * TODO: Replace the proportional normalization below with a PID velocity controller
+   *       for more accurate path tracking (requires working encoders first).
+   */
   public void driveRobotRelative(ChassisSpeeds speeds) {
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
-    double leftVelocity = wheelSpeeds.leftMetersPerSecond;
-    double rightVelocity = wheelSpeeds.rightMetersPerSecond;
 
-    // simple proportional - could add pid later for better tracking
-    double leftOutput = leftVelocity / Constants.MAX_VELOCITY_MPS;
-    double rightOutput = rightVelocity / Constants.MAX_VELOCITY_MPS;
+    // Normalize velocity to a [-1, 1] motor output using the configured max velocity.
+    double leftOutput  = wheelSpeeds.leftMetersPerSecond  / Constants.MAX_VELOCITY_MPS;
+    double rightOutput = wheelSpeeds.rightMetersPerSecond / Constants.MAX_VELOCITY_MPS;
 
-    leftMotor1.set(-leftOutput);
-    leftMotor2.set(-leftOutput);
-    rightMotor1.set(rightOutput);
-    rightMotor2.set(rightOutput);
+    setRawOutputs(leftOutput, rightOutput);
   }
 
+  /** Stops all drive motors immediately. */
   public void stop() {
-    leftMotor1.set(0);
-    leftMotor2.set(0);
-    rightMotor1.set(0);
-    rightMotor2.set(0);
+    setLeftMotors(0);
+    setRightMotors(0);
   }
 
-  // sensor stuff
+  // ── Sensors ────────────────────────────────────────────────────────────────
 
+  /**
+   * Returns the robot's current heading as a Rotation2d.
+   * The NavX angle is negated so that counter-clockwise rotation is positive
+   * (standard WPILib / field-coordinate convention).
+   */
   public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(-navx.getAngle()); // negative for ccw positive
+    return Rotation2d.fromDegrees(-navx.getAngle());
   }
 
+  /** Zeroes the NavX gyro. Call at match start or after a known-good heading is established. */
   public void zeroHeading() {
     navx.reset();
   }
 
+  /** Returns the distance the left side has traveled in meters since the last encoder reset. */
   public double getLeftDistanceMeters() {
+    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     return 0;
-    //return leftEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
+    // return leftEncoder.getPosition();
   }
 
-  
+  /** Returns the distance the right side has traveled in meters since the last encoder reset. */
   public double getRightDistanceMeters() {
+    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     return 0;
-    //return rightEncoder.getPosition() * Constants.ENCODER_POSITION_CONVERSION;
+    // return rightEncoder.getPosition();
   }
-  
 
+  /** Resets both drive encoders to zero. */
   public void resetEncoders() {
-    /*leftEncoder.setPosition(0);
-    rightEncoder.setPosition(0);*/
+    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
+    /*
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
+    */
   }
 
+  /** Returns the current wheel speeds in meters per second. */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    /*return new DifferentialDriveWheelSpeeds(
-        leftEncoder.getVelocity() * Constants.ENCODER_VELOCITY_CONVERSION,
-        rightEncoder.getVelocity() * Constants.ENCODER_VELOCITY_CONVERSION);*/
+    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
+    /*
+    return new DifferentialDriveWheelSpeeds(
+        leftEncoder.getVelocity(),
+        rightEncoder.getVelocity());
+    */
     return new DifferentialDriveWheelSpeeds(0, 0);
   }
 
+  /** Returns the current chassis speeds derived from wheel speeds. */
   public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getWheelSpeeds());
   }
 
-  // odometry
+  // ── Odometry ──────────────────────────────────────────────────────────────
 
+  /** Returns the robot's estimated field-relative pose. */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
 
+  /** Resets the robot's odometry to the given pose and zeroes the encoders. */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     odometry.resetPosition(
@@ -217,7 +251,27 @@ public class DriveTrain extends SubsystemBase {
         pose);
   }
 
+  /** Returns the drivetrain kinematics object (used by PathPlanner and other commands). */
   public DifferentialDriveKinematics getKinematics() {
     return kinematics;
+  }
+
+  // ── Private Helpers ────────────────────────────────────────────────────────
+
+  /**
+   * Writes motor outputs directly, bypassing the driver speed reduction.
+   * Used by PathPlanner (driveRobotRelative) to preserve precise velocity authority.
+   * Left motors are negated because they are physically mounted inverted relative to the right.
+   */
+  private void setRawOutputs(double leftOutput, double rightOutput) {
+    leftMotor1.set(-leftOutput);
+    leftMotor2.set(-leftOutput);
+    rightMotor1.set(rightOutput);
+    rightMotor2.set(rightOutput);
+  }
+
+  /** Clamps a motor speed value to the valid SparkMax input range [-1, 1]. */
+  private double clamp(double speed) {
+    return Math.max(-1, Math.min(1, speed));
   }
 }
