@@ -53,9 +53,12 @@ public class DriveTrain extends SubsystemBase {
         return leftEncoder.getPosition();
     }*/
 
-  // ── Sensors ────────────────────────────────────────────────────────────────
+  // ── Gyro (NavX) ──────────────────────────────────────────────────────────
+  // The gyro is accessed exclusively through getHeading(), getRotation2d(),
+  // and zeroHeading(). To swap to a different gyro (e.g. Pigeon2) or extract
+  // into a standalone GyroSubsystem, replace this field and update those three
+  // methods — no other code references the navx directly.
 
-  // NavX is connected via the MXP SPI port on the RoboRIO.
   private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
 
   // ── Kinematics & Odometry ──────────────────────────────────────────────────
@@ -193,6 +196,15 @@ public class DriveTrain extends SubsystemBase {
   /** Zeroes the NavX gyro. Call at match start or after a known-good heading is established. */
   public void zeroHeading() {
     navx.reset();
+  }
+
+  /**
+   * Returns the robot's current heading as a Rotation2d.
+   * Alias for {@link #getHeading()} — provided for API consistency with WPILib examples
+   * that expect a getRotation2d() method.
+   */
+  public Rotation2d getRotation2d() {
+    return getHeading();
   }
 
   /** Returns the distance the left side has traveled in meters since the last encoder reset. */
