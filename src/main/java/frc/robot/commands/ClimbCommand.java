@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class ClimbCommand extends Command {
@@ -17,8 +18,8 @@ public class ClimbCommand extends Command {
   public void execute() {
     int pov = Robot.m_oi.GetCopilotPOV();
     double speed = 0;
-    if(pov == 0) { speed = 1; }
-    else if(pov == 180) { speed = -1; }
+    if(pov == 0) { speed = Constants.CLIMB_UP_SPEED; }
+    else if(pov == 180) { speed = Constants.CLIMB_DOWN_SPEED; }
     Robot.climb.run(speed);
   }
 
