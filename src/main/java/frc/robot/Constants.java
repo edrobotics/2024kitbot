@@ -67,9 +67,6 @@ public final class Constants {
   public static final double CLIMB_DOWN_SPEED = -1.0;
 
   //Controller
-  //As the numbering of the axes and buttons differs on different controllers, separate constants are made for the different types
-  public static final String pilotControllerType = "logitech"; //"logitech" or "ps4"
-  public static final String copilotControllerType = "ps4"; //"logitech" or "ps4"
   public static final int CONTROL_PILOT_ID = 0;
   public static final int CONTROL_COPILOT_ID = 1;
 

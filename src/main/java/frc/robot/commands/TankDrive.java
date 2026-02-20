@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class TankDrive extends Command {
@@ -14,25 +13,12 @@ public class TankDrive extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
-    if(Constants.pilotControllerType.equals("ps4")) {
-      double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickY);
-      double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightStickY);
-  
-      Robot.driveTrain.setLeftMotors(leftStickY);
-      Robot.driveTrain.setRightMotors(rightStickY);
-    }
-    else if(Constants.pilotControllerType.equals("logitech")) {
-      double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickY);
-      double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_rightStickY);
-
-      Robot.driveTrain.setLeftMotors(leftStickY);
-      Robot.driveTrain.setRightMotors(rightStickY);
-    }
+    Robot.driveTrain.setLeftMotors(Robot.m_oi.getPilotLeftStickY());
+    Robot.driveTrain.setRightMotors(Robot.m_oi.getPilotRightStickY());
   }
 
   @Override

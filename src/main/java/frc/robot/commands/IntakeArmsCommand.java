@@ -23,12 +23,7 @@ public class IntakeArmsCommand extends Command {
 
     @Override
     public void execute() {
-        boolean buttonIntakeArms = false;
-        if (Constants.copilotControllerType.equals("ps4")) {
-          buttonIntakeArms = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonTriangle);
-        } else if (Constants.copilotControllerType.equals("logitech")) {
-          buttonIntakeArms = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonY);
-        }
+        boolean buttonIntakeArms = Robot.m_oi.getCopilotIntakeArms();
 
         //Sets either positive or negative speed
         speed = positiveDirection ? Math.abs(speed) : -Math.abs(speed);

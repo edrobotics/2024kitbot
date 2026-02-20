@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class GTADrive extends Command {
@@ -14,32 +13,15 @@ public class GTADrive extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
-    if(Constants.pilotControllerType.equals("ps4"))
-    {
-      double steering = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickX);
-      steering = steering*Math.abs(steering);
-      double leftTrigger = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftTrigger);
-      double rightTrigger = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightTrigger);
-      double speed = (rightTrigger-leftTrigger)/2;
+    double steering = Robot.m_oi.getPilotSteering();
+    double speed    = Robot.m_oi.getPilotThrottle();
 
-      Robot.driveTrain.setLeftMotors(speed+steering);
-      Robot.driveTrain.setRightMotors(speed-steering);
-    }
-    else if(Constants.pilotControllerType.equals("logitech"))
-    {
-      double steering = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickX);
-      double leftTrigger = Robot.m_oi.GetPilotRawButton(Constants.logitech_buttonLT) ? 1 : 0;
-      double rightTrigger = Robot.m_oi.GetPilotRawButton(Constants.logitech_buttonRT) ? 1 : 0;
-      double speed = rightTrigger-leftTrigger;
-
-      Robot.driveTrain.setLeftMotors(speed+steering);
-      Robot.driveTrain.setRightMotors(speed-steering);
-    }
+    Robot.driveTrain.setLeftMotors(speed + steering);
+    Robot.driveTrain.setRightMotors(speed - steering);
   }
 
   @Override

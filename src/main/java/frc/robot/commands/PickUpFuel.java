@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import frc.robot.Constants;
 
 public class PickUpFuel extends Command {
   public PickUpFuel() {
@@ -18,22 +17,10 @@ public class PickUpFuel extends Command {
 
   @Override
   public void execute() {
-    if(Constants.copilotControllerType == "ps4") {
-      boolean circleButton = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonCircle);
-      boolean squareButton = Robot.m_oi.GetCopilotRawButton(Constants.ps4_buttonSquare);
-      //If circle is pressed, it runs in positive direction
-      //If square is pressed, it runs in negative direction
-      //If both are pressed, it does not run
-      Robot.intake.setIntakeMotor(squareButton ^ circleButton ? (squareButton ? -1 : 1) : 0);
-    }
-    else if(Constants.copilotControllerType == "logitech") {
-      boolean buttonB = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonB);
-      boolean buttonX = Robot.m_oi.GetCopilotRawButton(Constants.logitech_buttonX);
-      //If B is pressed, it runs in positive direction
-      //If X is pressed, it runs in negative direction
-      //If both are pressed, it does not run
-      Robot.intake.setIntakeMotor(buttonB ^ buttonX ? (buttonB ? 1 : -1) : 0);
-    }
+    boolean intakeIn  = Robot.m_oi.getCopilotIntakeIn();
+    boolean intakeOut = Robot.m_oi.getCopilotIntakeOut();
+    // XOR: if both pressed at once, do nothing; otherwise run in the appropriate direction
+    Robot.intake.setIntakeMotor(intakeIn ^ intakeOut ? (intakeIn ? 1 : -1) : 0);
   }
 
   @Override
