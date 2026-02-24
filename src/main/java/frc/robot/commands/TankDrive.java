@@ -19,14 +19,14 @@ public class TankDrive extends Command {
 
   @Override
   public void execute() {
-    if(Constants.pilotControllerType.equals("ps4")) {
+    if(Constants.pilotControllerType == "ps4") {
       double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_leftStickY);
       double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.ps4_rightStickY);
   
       Robot.driveTrain.setLeftMotors(leftStickY);
       Robot.driveTrain.setRightMotors(rightStickY);
     }
-    else if(Constants.pilotControllerType.equals("logitech")) {
+    else if(Constants.pilotControllerType == "logitech") {
       double leftStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_leftStickY);
       double rightStickY = Robot.m_oi.GetPilotRawAxis(Constants.logitech_rightStickY);
 

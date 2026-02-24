@@ -13,10 +13,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class IntakeArms extends SubsystemBase {
   private SparkMax leftIntakeArmsMotor = new SparkMax(Constants.leftIntakeMotorArmID, MotorType.kBrushless);
   private SparkMax rightIntakeArmsMotor = new SparkMax(Constants.rightIntakeMotorArmID, MotorType.kBrushless);
+  private double min = Constants.intakeArmsClampMin;
+  private double max = Constants.intakeArmsClampMax;
 
   // encoders - if using brushed motors you'll need external encoders instead
   private final RelativeEncoder leftEncoder = leftIntakeArmsMotor.getEncoder();
@@ -32,9 +35,6 @@ public class IntakeArms extends SubsystemBase {
     //encoder config
     SparkMaxConfig config = new SparkMaxConfig();
 
-    config.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    config.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
-
     leftIntakeArmsMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightIntakeArmsMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -46,8 +46,8 @@ public class IntakeArms extends SubsystemBase {
 
   // Do NOT touch the following function unless it is needed. It makes sure both the motors run in the same direction
   public void setIntakeArmsMotors(double speed) {
-    leftIntakeArmsMotor.set(-speed);
-    rightIntakeArmsMotor.set(speed);
+    leftIntakeArmsMotor.set(Robot.functions.clamp(-speed, min, max));
+    rightIntakeArmsMotor.set(Robot.functions.clamp(speed, min, max));
   }
   public void resetEncoders() {
     leftEncoder.setPosition(0);

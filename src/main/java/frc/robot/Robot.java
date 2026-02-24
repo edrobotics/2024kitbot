@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   public static ClimbSubsystem climb = new ClimbSubsystem();
   public static VisionSubsystem vision = new VisionSubsystem();
   public static OI m_oi;
+  public static Functions functions = new Functions();
 
   private Pose3d poseA = new Pose3d();
   private Pose3d poseB = new Pose3d();

@@ -20,6 +20,8 @@ public final class Constants {
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
   public static final double speedReduction = 0.6;
+  public static final double driveTrainClampMin = -1; // the minimal speed value for the DriveTrain motors
+  public static final double driveTrainClampMax = 1; // the maximal speed value for the DriveTrain motors
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -41,15 +43,17 @@ public final class Constants {
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
   public static final long autonomousTime = 20000; // in milliseconds
   public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
-  public static final double AUTO_DRIVE_SPEED = 0.5; // motor speed during auto drive
+  public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
 
   //Intake
   public static final boolean intakeConnected = true;
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
-  public static final double INTAKE_ARMS_TARGET_DEGREES = 90; // rotation target per toggle
-  public static final double INTAKE_ARMS_SPEED = 0.5; // motor speed for intake arms
+  public static final double INTAKE_ARMS_TARGET_DEGREES = 360; // rotation target per toggle
+  public static final double INTAKE_ARMS_SPEED = 0.1; // motor speed for intake arms
+  public static final double intakeArmsClampMin = -0.1; // the minimal speed value for the IntakeArms motors
+  public static final double intakeArmsClampMax = 0.1; // the maximal speed value for the IntakeArms motors
 
   // Vision / AprilTags
   // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.

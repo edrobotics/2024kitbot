@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -39,6 +40,9 @@ public class DriveTrain extends SubsystemBase {
   private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushless);
   private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
   private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
+  private final double gearing = 1/Constants.GEARING;
+  private final double min = Constants.driveTrainClampMin;
+  private final double max = Constants.driveTrainClampMax;
 
   // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
   //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry:
@@ -60,8 +64,8 @@ public class DriveTrain extends SubsystemBase {
   private static boolean autoBuilderConfigured = false;
   
   public double getPosition() {
-        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-        return leftEncoder.getPosition();
+        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) * gearing / 2;
+        return leftEncoder.getPosition() * gearing;
     }
 
   // ── Gyro (NavX) ──────────────────────────────────────────────────────────
@@ -166,14 +170,14 @@ public class DriveTrain extends SubsystemBase {
 
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
-    speed = clamp(speed);
+    speed = Robot.functions.clamp(speed, min, max);
     leftMotor1.set(-speed * Constants.speedReduction);
     leftMotor2.set(-speed * Constants.speedReduction);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
-    speed = clamp(speed);
+    speed = Robot.functions.clamp(speed, min, max);
     rightMotor1.set(speed * Constants.speedReduction);
     rightMotor2.set(speed * Constants.speedReduction);
   }
@@ -199,8 +203,8 @@ public class DriveTrain extends SubsystemBase {
     double rightOutput = wheelSpeeds.rightMetersPerSecond / Constants.MAX_VELOCITY_MPS;
     
     // Clamp outputs to valid motor range [-1, 1]
-    leftOutput = clamp(leftOutput);
-    rightOutput = clamp(rightOutput);
+    leftOutput = Robot.functions.clamp(leftOutput, min, max);
+    rightOutput = Robot.functions.clamp(rightOutput, min, max);
     
     // Log requested speeds for diagnostics
     SmartDashboard.putNumber("PathPlanner Vx m/s", speeds.vxMetersPerSecond);
@@ -318,10 +322,5 @@ public class DriveTrain extends SubsystemBase {
     leftMotor2.set(-leftOutput);
     rightMotor1.set(rightOutput);
     rightMotor2.set(rightOutput);
-  }
-
-  /** Clamps a motor speed value to the valid SparkMax input range [-1, 1]. */
-  private double clamp(double speed) {
-    return Math.max(-1, Math.min(1, speed));
   }
 }
