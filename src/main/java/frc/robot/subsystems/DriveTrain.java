@@ -31,15 +31,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Functions;
 
 public class DriveTrain extends SubsystemBase {
 
   // ── Motor Controllers ──────────────────────────────────────────────────────
 
-  private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushless);
-  private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushless);
-  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
-  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
+  private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushed);
+  private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushed);
+  private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushed);
+  private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushed);
   private final double gearing = 1/Constants.GEARING;
   private final double min = Constants.driveTrainClampMin;
   private final double max = Constants.driveTrainClampMax;
@@ -53,8 +54,8 @@ public class DriveTrain extends SubsystemBase {
   //       4. (Optional) Once a VisionSubsystem is providing AprilTag poses, feed them
   //          into a DifferentialDrivePoseEstimator to fuse vision + wheel odometry.
   
-  private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
-  private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
+  // private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
+  // private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
   
   // Simulated encoder values for PathPlanner in simulation
   private double simulatedLeftDistance = 0;
@@ -65,7 +66,8 @@ public class DriveTrain extends SubsystemBase {
   
   public double getPosition() {
         // return (leftEncoder.getPosition() + rightEncoder.getPosition()) * gearing / 2;
-        return leftEncoder.getPosition() * gearing;
+        // return leftEncoder.getPosition() * gearing;
+        return 0;
     }
 
   // ── Gyro (NavX) ──────────────────────────────────────────────────────────
@@ -91,12 +93,12 @@ public class DriveTrain extends SubsystemBase {
     // Configure encoder conversion factors on the leader motors so that position
     // and velocity readings are already in meters / meters-per-second.
     // TODO: This encoder config only takes effect when encoders are enabled (see TODO above).
-    SparkMaxConfig encoderConfig = new SparkMaxConfig();
-    encoderConfig.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    encoderConfig.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+    // SparkMaxConfig encoderConfig = new SparkMaxConfig();
+    // encoderConfig.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
+    // encoderConfig.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
 
-    leftMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    rightMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // leftMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // rightMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     resetEncoders();
 
@@ -170,14 +172,14 @@ public class DriveTrain extends SubsystemBase {
 
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
-    speed = Robot.functions.clamp(speed, min, max);
+    speed = Functions.clamp(speed, min, max);
     leftMotor1.set(-speed * Constants.speedReduction);
     leftMotor2.set(-speed * Constants.speedReduction);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
-    speed = Robot.functions.clamp(speed, min, max);
+    speed = Functions.clamp(speed, min, max);
     rightMotor1.set(speed * Constants.speedReduction);
     rightMotor2.set(speed * Constants.speedReduction);
   }
@@ -203,8 +205,8 @@ public class DriveTrain extends SubsystemBase {
     double rightOutput = wheelSpeeds.rightMetersPerSecond / Constants.MAX_VELOCITY_MPS;
     
     // Clamp outputs to valid motor range [-1, 1]
-    leftOutput = Robot.functions.clamp(leftOutput, min, max);
-    rightOutput = Robot.functions.clamp(rightOutput, min, max);
+    leftOutput = Functions.clamp(leftOutput, min, max);
+    rightOutput = Functions.clamp(rightOutput, min, max);
     
     // Log requested speeds for diagnostics
     SmartDashboard.putNumber("PathPlanner Vx m/s", speeds.vxMetersPerSecond);
@@ -266,8 +268,8 @@ public class DriveTrain extends SubsystemBase {
   public void resetEncoders() {
     // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     
-    leftEncoder.setPosition(0);
-    rightEncoder.setPosition(0);
+    // leftEncoder.setPosition(0);
+    // rightEncoder.setPosition(0);
     
   }
 

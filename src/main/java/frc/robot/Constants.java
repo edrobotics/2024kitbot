@@ -50,7 +50,6 @@ public final class Constants {
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
-  public static final double INTAKE_ARMS_TARGET_DEGREES = 360; // rotation target per toggle
   public static final double INTAKE_ARMS_SPEED = 0.1; // motor speed for intake arms
   public static final double intakeArmsClampMin = -0.1; // the minimal speed value for the IntakeArms motors
   public static final double intakeArmsClampMax = 0.1; // the maximal speed value for the IntakeArms motors
