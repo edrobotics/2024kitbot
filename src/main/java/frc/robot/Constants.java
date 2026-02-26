@@ -41,15 +41,16 @@ public final class Constants {
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
   public static final long autonomousTime = 20000; // in milliseconds
   public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
-  public static final double AUTO_DRIVE_SPEED = 0.5; // motor speed during auto drive
+  public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
 
   //Intake
   public static final boolean intakeConnected = true;
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
-  public static final double INTAKE_ARMS_TARGET_DEGREES = 90; // rotation target per toggle
-  public static final double INTAKE_ARMS_SPEED = 0.5; // motor speed for intake arms
+  public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.25; // rotation target per toggle
+  public static final double INTAKE_ARMS_SPEED = 0.1; // motor speed for intake arms
+  public static final double intakeSpeedReduction = 0.2;
 
   // Vision / AprilTags
   // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.

@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Functions;
 
 public class IntakeArms extends SubsystemBase {
   private SparkMax leftIntakeArmsMotor = new SparkMax(Constants.leftIntakeMotorArmID, MotorType.kBrushless);
@@ -22,8 +23,9 @@ public class IntakeArms extends SubsystemBase {
   private final RelativeEncoder leftEncoder = leftIntakeArmsMotor.getEncoder();
   private final RelativeEncoder rightEncoder = rightIntakeArmsMotor.getEncoder();
   public double getPosition() {
-        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-        return leftEncoder.getPosition();
+    // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
+    double position = leftEncoder.getPosition();
+    return position;
     }
   
   public IntakeArms() {
@@ -32,8 +34,10 @@ public class IntakeArms extends SubsystemBase {
     //encoder config
     SparkMaxConfig config = new SparkMaxConfig();
 
-    config.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    config.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+    //config.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
+    //config.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+    config.encoder.positionConversionFactor(1);
+    config.encoder.velocityConversionFactor(1);
 
     leftIntakeArmsMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightIntakeArmsMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -26,7 +26,7 @@ public class OI {
   public OI() {
     pilotType   = detectType(pilotController, ControllerType.PS4);
     copilotType = detectType(copilotController, ControllerType.LOGITECH);
-    Functions.printInTerminal(Functions.roundToDecimalPlaces(314.159265358979323846, -2));
+    
     // Publish detected types so you can verify in the dashboard
     SmartDashboard.putString("Pilot Controller",   pilotType.name());
     SmartDashboard.putString("Copilot Controller", copilotType.name());
@@ -147,12 +147,17 @@ public class OI {
   }
 
   /** Intake arms toggle button. PS4: Triangle. Logitech: Y. */
+  private boolean intakeArmWasPressed = false;
   public boolean getCopilotIntakeArms() {
     if(copilotType == ControllerType.PS4) {
-      return getCopilotRawButton(Constants.ps4_buttonTriangle);
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonTriangle);
+      intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonTriangle);
+      return returnValue;
     }
     else if(copilotType == ControllerType.LOGITECH) {
-      return getCopilotRawButton(Constants.logitech_buttonY);
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonY);
+      intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonY);
+      return returnValue;
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");
@@ -163,9 +168,12 @@ public class OI {
   // ── Low-level pass-throughs ──────────────────────────────────────────────
   // Kept so any code that needs a specific raw axis/button can still reach it.
   public double  getPilotRawAxis(int axis)       { return pilotController.getRawAxis(axis); }
-  public boolean getPilotRawButton(int button)   { return pilotController.getRawButton(button); }
+  public boolean getPilotRawButton(int button) { return pilotController.getRawButton(button); }
   public int     getPilotPOV()                   { return pilotController.getPOV(); }
   public double  getCopilotRawAxis(int axis)     { return copilotController.getRawAxis(axis); }
   public boolean getCopilotRawButton(int button) { return copilotController.getRawButton(button); }
   public int     getCopilotPOV()                 { return copilotController.getPOV(); }
+
+  public int getPilotButtonCount() { return pilotController.getButtonCount(); }
+  public int getCopilotButtonCount() { return copilotController.getButtonCount(); }
 }
