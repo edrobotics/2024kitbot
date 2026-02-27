@@ -19,7 +19,7 @@ import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
-import frc.robot.commands.IntakeArmsCommand;
+import frc.robot.commands.IntakeSmartArmsCommand;
 import frc.robot.commands.ClimbCommand; 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
 
     driveTrain.setDefaultCommand(new GTADrive());
     intake.setDefaultCommand(new PickUpFuel());
-    intakeArms.setDefaultCommand(new IntakeArmsCommand());
+    intakeArms.setDefaultCommand(new IntakeSmartArmsCommand());
     climb.setDefaultCommand(new ClimbCommand());
 
     publisher = NetworkTableInstance.getDefault()

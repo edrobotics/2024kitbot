@@ -50,8 +50,8 @@ public class IntakeArms extends SubsystemBase {
 
   // Do NOT touch the following function unless it is needed. It makes sure both the motors run in the same direction
   public void setIntakeArmsMotors(double speed) {
-    leftIntakeArmsMotor.set(-speed);
-    rightIntakeArmsMotor.set(speed);
+    leftIntakeArmsMotor.set(Functions.clamp(-speed, -0.1, 0.1));
+    rightIntakeArmsMotor.set(Functions.clamp(speed, -0.1, 0.1));
   }
   public void resetEncoders() {
     leftEncoder.setPosition(0);

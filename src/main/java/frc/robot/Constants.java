@@ -48,9 +48,10 @@ public final class Constants {
   public static final int intakeMotorId = 6;
   public static final int leftIntakeMotorArmID = 7;
   public static final int rightIntakeMotorArmID = 8;
-  public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.25; // rotation target per toggle
-  public static final double INTAKE_ARMS_SPEED = 0.1; // motor speed for intake arms
-  public static final double intakeSpeedReduction = 0.2;
+  public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.2; // rotation target per toggle
+  public static final double INTAKE_ARMS_SPEED = 0.2; // motor speed for intake arms
+  public static final double Intake_Arms_GEARING = 1;
+  public static final double intakeSpeedReduction = 0.2; // pecentage of minimum speed for the motor when approaching the target position
 
   // Vision / AprilTags
   // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.
