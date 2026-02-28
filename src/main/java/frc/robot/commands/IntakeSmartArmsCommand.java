@@ -24,9 +24,9 @@ public class IntakeSmartArmsCommand extends Command {
       positiveDirection = buttonIntakeArms ? !positiveDirection : positiveDirection; // toggle direction if button is pressed
       
       //Sets either positive or negative target rotations
-      double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS * Constants.Intake_Arms_GEARING : 0;
+      double targetRotations = positiveDirection ? -Constants.INTAKE_ARMS_TARGET_ROTATIONS * Constants.Intake_Arms_GEARING : 0;
 
-      Robot.intakeArms.setIntakeArmsMotors(Math.abs(targetRotations - position) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations - position) : 0);
+      Robot.intakeArms.setIntakeArmsMotors(Math.abs(targetRotations - position) > Constants.INTAKE_ARMS_DEADBAND ? Constants.INTAKE_ARMS_SPEED * (targetRotations - position) : 0);
     }
 
     @Override

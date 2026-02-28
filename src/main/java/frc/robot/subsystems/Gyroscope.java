@@ -17,14 +17,7 @@ public class Gyroscope extends SubsystemBase {
   public Gyroscope() {}
 
   @Override
-  public void periodic() {
-    Functions.printInTerminal(getPitch(), "Pitch:");
-    Functions.printInTerminal(getYaw(), "Yaw:");
-    Functions.printInTerminal(getRoll(), "Roll");
-    if(Robot.m_oi.getCopilotRawButton(Constants.logitech_buttonA)) {
-      resetHeading();
-    }
-  }
+  public void periodic() {}
 
   private AHRS navx = new AHRS(NavXComType.kUSB1);
 

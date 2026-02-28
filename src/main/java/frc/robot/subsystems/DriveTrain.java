@@ -65,10 +65,12 @@ public class DriveTrain extends SubsystemBase {
   // Track whether PathPlanner was successfully configured
   private static boolean autoBuilderConfigured = false;
   
-  public double getPosition() {
-        // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-        return leftEncoder.getPosition();
-    }
+  public double getLeftPosition() {
+    return leftEncoder.getPosition();
+  }
+  public double getRightPosition() {
+    return rightEncoder.getPosition();
+  }
 
   // ── Gyro (NavX) ──────────────────────────────────────────────────────────
   // The gyro is accessed exclusively through getHeading(), getRotation2d(),

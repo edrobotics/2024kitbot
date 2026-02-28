@@ -25,9 +25,10 @@ public class IntakeArms extends SubsystemBase {
   private final RelativeEncoder rightEncoder = rightIntakeArmsMotor.getEncoder();
   public double getPosition() {
     // return (leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
-    double position = leftEncoder.getPosition();
+    double position = rightEncoder.getPosition();
     return position;
     }
+  
   
   public IntakeArms() {
     // any init if needed
