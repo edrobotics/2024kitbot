@@ -173,15 +173,15 @@ public class DriveTrain extends SubsystemBase {
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
     speed = Functions.clamp(speed);
-    leftMotor1.set(-speed * Constants.speedReduction);
-    leftMotor2.set(-speed * Constants.speedReduction);
+    leftMotor1.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    leftMotor2.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
     speed = Functions.clamp(speed);
-    rightMotor1.set(speed * Constants.speedReduction);
-    rightMotor2.set(speed * Constants.speedReduction);
+    rightMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    rightMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   /** Arcade drive: xSpeed is forward/backward [-1, 1], rot is turn rate [-1, 1]. */

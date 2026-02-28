@@ -19,7 +19,7 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double speedReduction = 0.6;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.6;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -29,8 +29,8 @@ public final class Constants {
   public static final double DRIVE_KI = 0.0;
   public static final double DRIVE_KD = 0.0;
   // encoder stuff for neos
-  public static final double GEARING = 8.45; // kitbot gearing
-  public static final double ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / GEARING;
+  public static final double DRIVETRAIN_GEARING = 8.45; // kitbot gearing
+  public static final double ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / DRIVETRAIN_GEARING;
   public static final double ENCODER_VELOCITY_CONVERSION = ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
 
   //Autonomous
@@ -39,7 +39,7 @@ public final class Constants {
   public static final double MAX_ACCELERATION_MPSS = 1.5;
   public static final double MAX_ANGULAR_VELOCITY_RAD = Math.PI;
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
-  public static final long autonomousTime = 20000; // in milliseconds
+  public static final long AUTO_TIME = 20000; // in milliseconds
   public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
   public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
 
@@ -51,7 +51,8 @@ public final class Constants {
   public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.2; // rotation target per toggle
   public static final double INTAKE_ARMS_SPEED = 0.2; // motor speed for intake arms
   public static final double Intake_Arms_GEARING = 1;
-  public static final double intakeSpeedReduction = 0.2; // pecentage of minimum speed for the motor when approaching the target position
+  public static final double INTAKE_ARMS_SPEED_REDUCTION = 0.2; // pecentage of minimum speed for the motor when approaching the target position
+  public static final double INTAKE_ARMS_DEADBAND = 0.05;
 
   // Vision / AprilTags
   // TODO: Set CAMERA_NAME to match the name configured in PhotonVision.

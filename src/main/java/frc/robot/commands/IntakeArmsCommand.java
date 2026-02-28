@@ -37,7 +37,7 @@ public class IntakeArmsCommand extends Command {
       }
       if (isRunning) {
         deltaPosition = Math.abs(Robot.intakeArms.getPosition()-startPosition);
-        Robot.intakeArms.setIntakeArmsMotors(speed*Constants.intakeSpeedReduction + speed*(targetRotations-deltaPosition)/targetRotations*(1-Constants.intakeSpeedReduction));
+        Robot.intakeArms.setIntakeArmsMotors(speed*Constants.INTAKE_ARMS_SPEED_REDUCTION + speed*(targetRotations-deltaPosition)/targetRotations*(1-Constants.INTAKE_ARMS_SPEED_REDUCTION));
       }
       //Make so that the motors will stop next time
       if (deltaPosition >= Math.abs(targetRotations) && ((Robot.intakeArms.getPosition() - startPosition) > 0) == positiveDirection) {
