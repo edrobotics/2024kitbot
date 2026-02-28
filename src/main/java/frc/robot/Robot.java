@@ -15,20 +15,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
+//Commands
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
 import frc.robot.commands.IntakeSmartArmsCommand;
-import frc.robot.commands.ClimbCommand; 
+import frc.robot.commands.ClimbCommand;
+//Subsystems
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.IntakeArms;
 import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.Gyroscope;
 import frc.robot.subsystems.VisionSubsystem;
 
 
 public class Robot extends TimedRobot {
+  public static Gyroscope gyroscope = new Gyroscope();
   public static DriveTrain driveTrain = new DriveTrain();
   public static Intake intake = new Intake();
   public static IntakeArms intakeArms = new IntakeArms();

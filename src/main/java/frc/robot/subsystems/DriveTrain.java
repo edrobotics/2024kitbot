@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+//RevLib
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -11,9 +12,11 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+//StudicaLib
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+//Pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -30,6 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.Functions;
 
@@ -100,7 +104,7 @@ public class DriveTrain extends SubsystemBase {
 
     // Initialize odometry at the origin facing forward.
     odometry = new DifferentialDriveOdometry(
-        getHeading(),
+        Robot.gyroscope.getHeading(),
         getLeftDistanceMeters(),
         getRightDistanceMeters(),
         new Pose2d());
@@ -152,12 +156,12 @@ public class DriveTrain extends SubsystemBase {
     simulatedLeftDistance += wheelSpeeds.leftMetersPerSecond * Constants.LOOP_PERIOD_SECONDS;
     simulatedRightDistance += wheelSpeeds.rightMetersPerSecond * Constants.LOOP_PERIOD_SECONDS;
     
-    odometry.update(getHeading(), getLeftDistanceMeters(), getRightDistanceMeters());
+    odometry.update(Robot.gyroscope.getHeading(), getLeftDistanceMeters(), getRightDistanceMeters());
     field2d.setRobotPose(getPose());
 
     SmartDashboard.putNumber("Robot X",        getPose().getX());
     SmartDashboard.putNumber("Robot Y",        getPose().getY());
-    SmartDashboard.putNumber("Robot Heading",  getHeading().getDegrees());
+    SmartDashboard.putNumber("Robot Heading",  Robot.gyroscope.getHeading().getDegrees());
     SmartDashboard.putNumber("Left Distance",  getLeftDistanceMeters());
     SmartDashboard.putNumber("Right Distance", getRightDistanceMeters());
     SmartDashboard.putNumber("Left Speed m/s", wheelSpeeds.leftMetersPerSecond);
@@ -225,25 +229,11 @@ public class DriveTrain extends SubsystemBase {
 
   /**
    * Returns the robot's current heading as a Rotation2d.
-   * The NavX angle is negated so that counter-clockwise rotation is positive
-   * (standard WPILib / field-coordinate convention).
-   */
-  public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(-navx.getAngle());
-  }
-
-  /** Zeroes the NavX gyro. Call at match start or after a known-good heading is established. */
-  public void zeroHeading() {
-    navx.reset();
-  }
-
-  /**
-   * Returns the robot's current heading as a Rotation2d.
    * Alias for {@link #getHeading()} — provided for API consistency with WPILib examples
    * that expect a getRotation2d() method.
    */
   public Rotation2d getRotation2d() {
-    return getHeading();
+    return Robot.gyroscope.getHeading();
   }
 
   /** Returns the distance the left side has traveled in meters since the last encoder reset. */
@@ -295,7 +285,7 @@ public class DriveTrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     odometry.resetPosition(
-        getHeading(),
+        Robot.gyroscope.getHeading(),
         getLeftDistanceMeters(),
         getRightDistanceMeters(),
         pose);
