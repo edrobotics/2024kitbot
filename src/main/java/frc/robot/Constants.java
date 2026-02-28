@@ -45,9 +45,9 @@ public final class Constants {
 
   //Intake
   public static final boolean intakeConnected = true;
-  public static final int intakeMotorId = 6;
-  public static final int leftIntakeMotorArmID = 7;
-  public static final int rightIntakeMotorArmID = 8;
+  public static final int intakeMotorId = 5;
+  public static final int leftIntakeMotorArmID = 6;
+  public static final int rightIntakeMotorArmID = 7;
   public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.2; // rotation target per toggle
   public static final double INTAKE_ARMS_SPEED = 0.2; // motor speed for intake arms
   public static final double Intake_Arms_GEARING = 1;
@@ -65,9 +65,11 @@ public final class Constants {
   );
 
   //Climber
-  public static final int CLIMB_MOTOR_ID = 5;
+  public static final int CLIMB_MOTOR_ID = 8; // the id of the motor which will power the climb, wont use encoder position because of high gearing + winch design
+  public static final int CLIMB_ENCODER_MOTOR_ID = 9; // the id of the motor whose job it is to keep the climb arm stowed away when nessessary, come up with a better name if you can
   public static final double CLIMB_UP_SPEED = 1.0;
   public static final double CLIMB_DOWN_SPEED = -1.0;
+  public static final double CLIMB_MOTOR_GEARING = 1; // the gearing of the climb motor
 
   //Controller
   public static final int CONTROL_PILOT_ID = 0;
