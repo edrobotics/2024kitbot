@@ -4,24 +4,41 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Functions;
 
 public class ClimbSubsystem extends SubsystemBase {
-  private final SparkMax climbMotor = new SparkMax(Constants.CLIMB_MOTOR_ID, MotorType.kBrushed);
+  private final SparkMax climbWinchMotor = new SparkMax(Constants.CLIMB_WINCH_MOTOR_ID, MotorType.kBrushless);
+  private final SparkFlex climbEncoderMotor = new SparkFlex(Constants.CLIMB_ENCODER_MOTOR_ID, MotorType.kBrushless);
+
+  private final RelativeEncoder climbEncoderMotorEncoder = climbEncoderMotor.getEncoder();
 
   public ClimbSubsystem() {}
 
-  public void run(double speed) {
-    speed = Math.max(-1.0, Math.min(1.0, speed));
-    climbMotor.set(speed);
+  public double getPosition() {
+    double position = climbEncoderMotorEncoder.getPosition();
+    return position;
+  }
+
+  public void runWinch(double speed) {
+    speed = Functions.clamp(speed);
+    climbWinchMotor.set(speed);
+  }
+
+  public void runEncoderMotor(double speed) {
+    speed = Functions.clamp(speed);
+    climbEncoderMotor.set(speed);
   }
 
   public void stop() {
-    climbMotor.set(0);
+    climbWinchMotor.set(0);
+    climbEncoderMotor.set(0);
   }
 
   @Override

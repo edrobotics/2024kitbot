@@ -9,6 +9,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class ClimbCommand extends Command {
+  private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
 
   public ClimbCommand() {
     addRequirements(Robot.climb);
@@ -20,7 +21,17 @@ public class ClimbCommand extends Command {
     double speed = 0;
     if(pov == 0) { speed = Constants.CLIMB_UP_SPEED; }
     else if(pov == 180) { speed = Constants.CLIMB_DOWN_SPEED; }
-    Robot.climb.run(speed);
+    Robot.climb.runWinch(speed);
+
+    boolean buttonEncoderMotor = Robot.m_oi.getCopilotIntakeArms();
+    double position = Robot.climb.getPosition();
+
+    positiveDirection = buttonEncoderMotor ? !positiveDirection : positiveDirection; // toggle direction if button is pressed
+    
+    //Sets either positive or negative target rotations
+    double targetRotations = positiveDirection ? -Constants.CLIMBER_TARGET_ROTATIONS : 0;
+
+    Robot.climb.runEncoderMotor(Math.abs(targetRotations - position) > Constants.CLIMBER_DEADBAND ? Constants.CLIMB_ENCODER_SPEED * (targetRotations - position) : 0);
   }
 
   @Override
