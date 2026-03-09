@@ -20,6 +20,15 @@ public class Gyroscope extends SubsystemBase {
   public void periodic() {}
 
   private AHRS navx = new AHRS(NavXComType.kUSB1);
+  
+  /**
+   * Returns the robot's current heading as a Rotation2d.
+   * Alias for {@link #getHeading()} — provided for API consistency with WPILib examples
+   * that expect a getRotation2d() method.
+   */
+  public Rotation2d getRotation2d() {
+    return Robot.gyroscope.getHeading();
+  }
 
   public Rotation2d getHeading() {
     return Rotation2d.fromDegrees(-navx.getAngle());

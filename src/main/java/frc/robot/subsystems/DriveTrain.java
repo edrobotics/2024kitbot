@@ -15,7 +15,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 //StudicaLib
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 //Pathplanner
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -40,7 +40,6 @@ import frc.robot.Functions;
 public class DriveTrain extends SubsystemBase {
 
   // ── Motor Controllers ──────────────────────────────────────────────────────
-
   private final SparkMax leftMotor1  = new SparkMax(Constants.LMOTOR1ID,  MotorType.kBrushless);
   private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushless);
   private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
@@ -68,17 +67,15 @@ public class DriveTrain extends SubsystemBase {
   public double getLeftPosition() {
     return leftEncoder.getPosition();
   }
+  public double getLeftSpeed() {
+    return leftEncoder.getVelocity();
+  }
   public double getRightPosition() {
     return rightEncoder.getPosition();
   }
-
-  // ── Gyro (NavX) ──────────────────────────────────────────────────────────
-  // The gyro is accessed exclusively through getHeading(), getRotation2d(),
-  // and zeroHeading(). To swap to a different gyro (e.g. Pigeon2) or extract
-  // into a standalone GyroSubsystem, replace this field and update those three
-  // methods — no other code references the navx directly.
-
-  private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
+  public double getRightSpeed() {
+    return rightEncoder.getVelocity();
+  }
 
   // ── Kinematics & Odometry ──────────────────────────────────────────────────
 
@@ -94,7 +91,6 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     // Configure encoder conversion factors on the leader motors so that position
     // and velocity readings are already in meters / meters-per-second.
-    // TODO: This encoder config only takes effect when encoders are enabled (see TODO above).
     SparkMaxConfig encoderConfig = new SparkMaxConfig();
     encoderConfig.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
     encoderConfig.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
@@ -105,11 +101,7 @@ public class DriveTrain extends SubsystemBase {
     resetEncoders();
 
     // Initialize odometry at the origin facing forward.
-    odometry = new DifferentialDriveOdometry(
-        Robot.gyroscope.getHeading(),
-        getLeftDistanceMeters(),
-        getRightDistanceMeters(),
-        new Pose2d());
+    odometry = new DifferentialDriveOdometry( Robot.gyroscope.getHeading(), getLeftDistanceMeters(), getRightDistanceMeters(), new Pose2d());
 
     SmartDashboard.putData("Field", field2d);
 
@@ -186,10 +178,35 @@ public class DriveTrain extends SubsystemBase {
     rightMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
+  public void setLeftMotorsSmoothly(double speed) {
+    speed = Functions.clamp(speed);
+    double leftVelocity = getLeftSpeed();
+    if(leftVelocity < Constants.DRIVETRAIN_MAX_INPUT_AT) {
+      double m = Constants.DRIVETRAIN_MIN_INPUT;
+      double k = (1-m)/Constants.DRIVETRAIN_MAX_INPUT_AT;
+      setLeftMotors(speed * (k*leftVelocity+m));
+    }
+    else {
+      setLeftMotors(speed);
+    }
+  }
+  public void setRightMotorsSmoothly(double speed) {
+    speed = Functions.clamp(speed);
+    double rightVelocity = getRightSpeed();
+    if(rightVelocity < Constants.DRIVETRAIN_MAX_INPUT_AT) {
+      double m = Constants.DRIVETRAIN_MIN_INPUT;
+      double k = (1-m)/Constants.DRIVETRAIN_MAX_INPUT_AT;
+      setRightMotors(speed * (k*rightVelocity+m));
+    }
+    else {
+      setRightMotors(speed);
+    }
+  }
+
   /** Arcade drive: xSpeed is forward/backward [-1, 1], rot is turn rate [-1, 1]. */
-  public void arcadeDrive(double xSpeed, double rot) {
-    setLeftMotors(xSpeed + rot);
-    setRightMotors(xSpeed - rot);
+  public void arcadeDrive(double xSpeed, double rotation) {
+    setLeftMotors(xSpeed + rotation);
+    setRightMotors(xSpeed - rotation);
   }
 
   /**
@@ -229,33 +246,21 @@ public class DriveTrain extends SubsystemBase {
 
   // ── Sensors ────────────────────────────────────────────────────────────────
 
-  /**
-   * Returns the robot's current heading as a Rotation2d.
-   * Alias for {@link #getHeading()} — provided for API consistency with WPILib examples
-   * that expect a getRotation2d() method.
-   */
-  public Rotation2d getRotation2d() {
-    return Robot.gyroscope.getHeading();
-  }
 
   /** Returns the distance the left side has traveled in meters since the last encoder reset. */
   public double getLeftDistanceMeters() {
-    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     // For simulation, integrate wheel speeds over time to estimate distance
     return simulatedLeftDistance;
   }
 
   /** Returns the distance the right side has traveled in meters since the last encoder reset. */
   public double getRightDistanceMeters() {
-    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     // For simulation, integrate wheel speeds over time to estimate distance
     return simulatedRightDistance;
   }
 
   /** Resets both drive encoders to zero. */
   public void resetEncoders() {
-    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
-    
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
     
@@ -263,7 +268,6 @@ public class DriveTrain extends SubsystemBase {
 
   /** Returns the current wheel speeds in meters per second. */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    // TODO: Encoders disabled — brushed motors require external encoders. See class-level TODO.
     // For simulation, derive wheel speeds from motor outputs scaled to max velocity
     double leftSpeed = -leftMotor1.get() * Constants.MAX_VELOCITY_MPS;
     double rightSpeed = rightMotor1.get() * Constants.MAX_VELOCITY_MPS;
@@ -286,11 +290,7 @@ public class DriveTrain extends SubsystemBase {
   /** Resets the robot's odometry to the given pose and zeroes the encoders. */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(
-        Robot.gyroscope.getHeading(),
-        getLeftDistanceMeters(),
-        getRightDistanceMeters(),
-        pose);
+    odometry.resetPosition(Robot.gyroscope.getHeading(), getLeftDistanceMeters(), getRightDistanceMeters(), pose);
   }
 
   /** Returns the drivetrain kinematics object (used by PathPlanner and other commands). */
@@ -303,7 +303,6 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Writes motor outputs directly, bypassing the driver speed reduction.
    * Used by PathPlanner (driveRobotRelative) to preserve precise velocity authority.
-   * Left motors are negated because they are physically mounted inverted relative to the right.
    */
   private void setRawOutputs(double leftOutput, double rightOutput) {
     // Set motor outputs directly (already in [-1, 1] range and clamped)

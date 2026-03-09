@@ -23,6 +23,7 @@ import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
 import frc.robot.commands.IntakeSmartArmsCommand;
 import frc.robot.commands.ClimbCommand;
+import frc.robot.commands.DeadReck;
 //Subsystems
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -48,6 +49,12 @@ public class Robot extends TimedRobot {
   private StructArrayPublisher<Pose3d> arrayPublisher;
 
   private Command m_autonomousCommand;
+  private Command deadReck = new DeadReck();
+
+  public Robot() {
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+  }
 
   //Called when the robot is started
   public void robotInit() {
@@ -57,18 +64,13 @@ public class Robot extends TimedRobot {
     intake.setDefaultCommand(new PickUpFuel());
     intakeArms.setDefaultCommand(new IntakeSmartArmsCommand());
     climb.setDefaultCommand(new ClimbCommand());
+    //gyroscope.setDefaultCommand(new DeadReck());
 
     publisher = NetworkTableInstance.getDefault()
-        .getStructTopic("MyPose", Pose3d.struct).publish();
+      .getStructTopic("MyPose", Pose3d.struct).publish();
 
     arrayPublisher = NetworkTableInstance.getDefault()
-        .getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
-
-  }
-
-  public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+      .getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
   }
 
   //Runs every 20 ms

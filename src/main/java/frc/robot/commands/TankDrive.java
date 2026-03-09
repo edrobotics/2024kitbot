@@ -17,8 +17,8 @@ public class TankDrive extends Command {
 
   @Override
   public void execute() {
-    Robot.driveTrain.setLeftMotors(Robot.m_oi.getPilotLeftStickY());
-    Robot.driveTrain.setRightMotors(Robot.m_oi.getPilotRightStickY());
+    Robot.driveTrain.setLeftMotorsSmoothly(Robot.m_oi.getPilotLeftStickY());
+    Robot.driveTrain.setRightMotorsSmoothly(Robot.m_oi.getPilotRightStickY());
   }
 
   @Override

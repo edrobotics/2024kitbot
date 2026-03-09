@@ -19,7 +19,7 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.6;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.1;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -29,9 +29,12 @@ public final class Constants {
   public static final double DRIVE_KI = 0.0;
   public static final double DRIVE_KD = 0.0;
   // encoder stuff for neos
-  public static final double DRIVETRAIN_GEARING = 8.45; // kitbot gearing
+  public static final double DRIVETRAIN_GEARING = 9.13; // kitbot gearing
   public static final double ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / DRIVETRAIN_GEARING;
   public static final double ENCODER_VELOCITY_CONVERSION = ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
+  // for smoother driving
+  public static final double DRIVETRAIN_MIN_INPUT = 0.1;  // the minimum input that is given for the drivetrain
+  public static final double DRIVETRAIN_MAX_INPUT_AT = 1; // at this speed the input is not reduced anymore
 
   //Autonomous
   public static final double LOOP_PERIOD_SECONDS = 0.02; // WPILib default scheduler period (20 ms)
@@ -44,7 +47,6 @@ public final class Constants {
   public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
 
   //Intake
-  public static final boolean intakeConnected = true;
   public static final int intakeMotorId = 5;
   public static final int leftIntakeMotorArmID = 6;
   public static final int rightIntakeMotorArmID = 7;
@@ -65,11 +67,14 @@ public final class Constants {
   );
 
   //Climber
-  public static final int CLIMB_MOTOR_ID = 8; // the id of the motor which will power the climb, wont use encoder position because of high gearing + winch design
+  public static final int CLIMB_WINCH_MOTOR_ID = 8; // the id of the motor which will power the climb, wont use encoder position because of high gearing + winch design
   public static final int CLIMB_ENCODER_MOTOR_ID = 9; // the id of the motor whose job it is to keep the climb arm stowed away when nessessary, come up with a better name if you can
-  public static final double CLIMB_UP_SPEED = 1.0;
-  public static final double CLIMB_DOWN_SPEED = -1.0;
+  public static final double CLIMB_UP_SPEED = 0.1;
+  public static final double CLIMB_DOWN_SPEED = -0.03;
   public static final double CLIMB_MOTOR_GEARING = 1; // the gearing of the climb motor
+  public static final double CLIMBER_TARGET_ROTATIONS = 0.75; // the target rotations for the climb encoder motor to reach when stowing/un-stowing the climb arm
+  public static final double CLIMBER_DEADBAND = 0.05; // the deadband for the climb encoder motor, to prevent it from jittering when it reaches the target position
+  public static final double CLIMB_ENCODER_SPEED = 0.2; // the speed of the climb encoder motor
 
   //Controller
   public static final int CONTROL_PILOT_ID = 0;
@@ -96,12 +101,13 @@ public final class Constants {
   public static final int ps4_buttonRightStick = 12;
   public static final int ps4_buttonPS = 13;
   public static final int ps4_buttonTouchpad = 14;
-  //For a logitech controller:
-  public static final int ps4_dpadUp = 4;
-  public static final int ps4_dpadDown = 5;
-  public static final int ps4_dpadLeft = 7;
-  public static final int ps4_dpadRight = 6;
 
+  public static final int ps4_dpadUp = 4;    //???
+  public static final int ps4_dpadDown = 5;  //???
+  public static final int ps4_dpadLeft = 7;  //???
+  public static final int ps4_dpadRight = 6; //???
+
+  //For a logitech controller:
   public static final int logitech_leftStickX = 0;
   public static final int logitech_leftStickY = 1;
   public static final int logitech_rightStickX = 2;
@@ -118,4 +124,24 @@ public final class Constants {
   public static final int logitech_buttonStart = 10;
   public static final int logitech_buttonLeftStick = 11;
   public static final int logitech_buttonRightStick = 12;
+
+  //For an Xbox controller
+  // The logitech controllers can be turned into an xbox with a switch on the lower side. D=logitech, X=xbox
+  public static final int xbox_leftStickX = 0;
+  public static final int xbox_leftStickY = 1;
+  public static final int xbox_leftTrigger = 2;
+  public static final int xbox_rightTrigger = 3;
+  public static final int xbox_rightStickX = 4;
+  public static final int xbox_rightStickY = 5;
+
+  public static final int xbox_buttonA = 1;
+  public static final int xbox_buttonB = 2;
+  public static final int xbox_buttonX = 3;
+  public static final int xbox_buttonY = 4;
+  public static final int xbox_buttonLB = 5;
+  public static final int xbox_buttonRB = 6;
+  public static final int xbox_buttonBack = 7;
+  public static final int xbox_buttonStart = 8;
+  public static final int xbox_buttonLeftStick = 9;
+  public static final int xbox_buttonRightStick = 10;
 }

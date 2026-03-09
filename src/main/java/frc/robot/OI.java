@@ -15,7 +15,7 @@ public class OI {
   // Names are matched against the string the driver station reports for the HID.
   // Add more entries here if you connect a different controller model.
 
-  public enum ControllerType { PS4, LOGITECH, OTHER }
+  public enum ControllerType { PS4, LOGITECH, XBOX }
 
   private final GenericHID pilotController   = new GenericHID(Constants.CONTROL_PILOT_ID);
   private final GenericHID copilotController = new GenericHID(Constants.CONTROL_COPILOT_ID);
@@ -24,8 +24,8 @@ public class OI {
   public final ControllerType copilotType;
 
   public OI() {
-    pilotType   = detectType(pilotController, ControllerType.PS4);
-    copilotType = detectType(copilotController, ControllerType.LOGITECH);
+    pilotType   = detectType(pilotController, ControllerType.XBOX);
+    copilotType = detectType(copilotController, ControllerType.XBOX);
     
     // Publish detected types so you can verify in the dashboard
     SmartDashboard.putString("Pilot Controller",   pilotType.name());
@@ -40,12 +40,11 @@ public class OI {
     else if (name.contains("logitech")) {
       return ControllerType.LOGITECH;
     }
-    else if(name.length() == 0) {
-      return useIfNotFound;
+    else if(name.contains("xbox")) {
+      return ControllerType.XBOX;
     }
     else {
-      Functions.printInTerminal(name, "Controller not supported:");
-      return ControllerType.OTHER;
+      return useIfNotFound;
     }
   }
 
@@ -59,6 +58,9 @@ public class OI {
     }
     else if(pilotType == ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_leftStickX);
+    }
+    else if(pilotType == ControllerType.XBOX) {
+      return getPilotRawAxis(Constants.xbox_leftStickX);
     }
     else {
       Functions.printInTerminal("Pilot controller type not supported");
@@ -82,6 +84,11 @@ public class OI {
       double rt = pilotController.getRawButton(Constants.logitech_buttonRT) ? 1 : 0;
       return rt - lt;
     }
+    else if(pilotType == ControllerType.XBOX) {
+      double lt = getPilotRawAxis(Constants.xbox_leftTrigger);
+      double rt = getPilotRawAxis(Constants.xbox_rightTrigger);
+      return rt - lt;
+    }
     else {
       Functions.printInTerminal("Pilot controller type not supported");
       return 0;
@@ -96,6 +103,9 @@ public class OI {
     else if(pilotType == ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_leftStickY);
     }
+    else if(pilotType == ControllerType.XBOX) {
+      return getPilotRawAxis(Constants.xbox_leftStickY);
+    }
     else {
       Functions.printInTerminal("Pilot controller type not supported");
       return 0;
@@ -108,6 +118,9 @@ public class OI {
       return getPilotRawAxis(Constants.ps4_rightStickY);
     }
     else if(pilotType == ControllerType.LOGITECH) {
+      return getPilotRawAxis(Constants.logitech_rightStickY);
+    }
+    else if(pilotType == ControllerType.XBOX) {
       return getPilotRawAxis(Constants.logitech_rightStickY);
     }
     else {
@@ -126,6 +139,9 @@ public class OI {
     else if(copilotType == ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonB);
     }
+    else if(copilotType == ControllerType.XBOX) {
+      return getCopilotRawButton(Constants.xbox_buttonB);
+    }
     else {
       Functions.printInTerminal("Copilot controller type not supported");
       return false;
@@ -139,6 +155,9 @@ public class OI {
     }
     else if(copilotType == ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonX);
+    }
+    else if(copilotType == ControllerType.XBOX) {
+      return getCopilotRawButton(Constants.xbox_buttonX);
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");
@@ -157,6 +176,11 @@ public class OI {
     else if(copilotType == ControllerType.LOGITECH) {
       boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonY);
       intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonY);
+      return returnValue;
+    }
+    else if(copilotType == ControllerType.XBOX) {
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonY);
+      intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonY);
       return returnValue;
     }
     else {
