@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Functions;
 import frc.robot.Robot;
 
 public class ClimbCommand extends Command {
@@ -14,6 +15,9 @@ public class ClimbCommand extends Command {
   public ClimbCommand() {
     addRequirements(Robot.climb);
   }
+  boolean buttonEncoderMotorWasPressed = false;
+  boolean climberPriority = false; // if true, the climb encoder motor will have priority over the intake arms encoder motor
+  boolean toggle = true;
 
   @Override
   public void execute() {
@@ -26,11 +30,23 @@ public class ClimbCommand extends Command {
     boolean buttonEncoderMotor = Robot.m_oi.getCopilotIntakeArms();
     double position = Robot.climb.getPosition();
 
-    positiveDirection = buttonEncoderMotor ? !positiveDirection : positiveDirection; // toggle direction if button is pressed
-    
-    //Sets either positive or negative target rotations
-    double targetRotations = positiveDirection ? -Constants.CLIMBER_TARGET_ROTATIONS : 0;
+    double targetRotations;
+    boolean intakePriority = Robot.intakeSmartArmsCommand.intakePriority;
 
+    boolean intakeIn = Functions.roundToDecimalPlaces(Robot.intakeArms.getPosition(),2)==0;
+    if (buttonEncoderMotor && !buttonEncoderMotorWasPressed) {
+      climberPriority = !intakePriority && intakeIn; // if the intake arms are not in, the climb encoder motor will have priority when activated
+
+      if (climberPriority && toggle) {
+        targetRotations = Constants.CLIMBER_TARGET_ROTATIONS;
+        toggle = false;
+      } else {
+        targetRotations = 0;
+        toggle = true;
+      }
+    }
+
+    buttonEncoderMotorWasPressed = buttonEncoderMotor;
     Robot.climb.runEncoderMotor(Math.abs(targetRotations - position) > Constants.CLIMBER_DEADBAND ? Constants.CLIMB_ENCODER_SPEED * (targetRotations - position) : 0);
   }
 
