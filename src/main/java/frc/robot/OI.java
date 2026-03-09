@@ -121,7 +121,7 @@ public class OI {
       return getPilotRawAxis(Constants.logitech_rightStickY);
     }
     else if(pilotType == ControllerType.XBOX) {
-      return getPilotRawAxis(Constants.logitech_rightStickY);
+      return getPilotRawAxis(Constants.xbox_rightStickY);
     }
     else {
       Functions.printInTerminal("Pilot controller type not supported");

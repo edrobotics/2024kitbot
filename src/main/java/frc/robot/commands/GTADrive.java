@@ -20,8 +20,8 @@ public class GTADrive extends Command {
     double steering = Robot.m_oi.getPilotSteering();
     double speed    = Robot.m_oi.getPilotThrottle();
 
-    Robot.driveTrain.setLeftMotors(speed + steering);
-    Robot.driveTrain.setRightMotors(speed - steering);
+    Robot.driveTrain.setLeftMotorsSmoothly(speed + steering);
+    Robot.driveTrain.setRightMotorsSmoothly(speed - steering);
   }
 
   @Override

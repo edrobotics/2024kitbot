@@ -19,7 +19,7 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.1;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.5;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -144,5 +144,4 @@ public final class Constants {
   public static final int xbox_buttonStart = 8;
   public static final int xbox_buttonLeftStick = 9;
   public static final int xbox_buttonRightStick = 10;
-  
 }

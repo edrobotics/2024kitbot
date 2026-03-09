@@ -181,24 +181,28 @@ public class DriveTrain extends SubsystemBase {
   public void setLeftMotorsSmoothly(double speed) {
     speed = Functions.clamp(speed);
     double leftVelocity = getLeftSpeed();
-    if(leftVelocity < Constants.DRIVETRAIN_MAX_INPUT_AT) {
+    if(Math.abs(leftVelocity) < Constants.DRIVETRAIN_MAX_INPUT_AT)
+    {
       double m = Constants.DRIVETRAIN_MIN_INPUT;
       double k = (1-m)/Constants.DRIVETRAIN_MAX_INPUT_AT;
-      setLeftMotors(speed * (k*leftVelocity+m));
+      setLeftMotors(speed * (Math.abs(k*leftVelocity)+m));
     }
-    else {
+    else
+    {
       setLeftMotors(speed);
     }
   }
   public void setRightMotorsSmoothly(double speed) {
     speed = Functions.clamp(speed);
     double rightVelocity = getRightSpeed();
-    if(rightVelocity < Constants.DRIVETRAIN_MAX_INPUT_AT) {
+    if(Math.abs(rightVelocity) < Constants.DRIVETRAIN_MAX_INPUT_AT)
+    {
       double m = Constants.DRIVETRAIN_MIN_INPUT;
       double k = (1-m)/Constants.DRIVETRAIN_MAX_INPUT_AT;
-      setRightMotors(speed * (k*rightVelocity+m));
+      setRightMotors(speed * (Math.abs(k*rightVelocity)+m));
     }
-    else {
+    else
+    {
       setRightMotors(speed);
     }
   }
