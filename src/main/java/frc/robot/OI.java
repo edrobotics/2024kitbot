@@ -190,18 +190,18 @@ public class OI {
   private boolean climberWasPressed = false;
   public boolean getCopilotClimber() {
     if(copilotType == Constants.ControllerType.PS4) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonX);
-      intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonX);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.ps4_buttonX);
+      climberWasPressed = getCopilotRawButton(Constants.ps4_buttonX);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonA);
-      intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonA);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.logitech_buttonA);
+      climberWasPressed = getCopilotRawButton(Constants.logitech_buttonA);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonA);
-      intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonA);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.xbox_buttonA);
+      climberWasPressed = getCopilotRawButton(Constants.xbox_buttonA);
       return returnValue;
     }
     else {

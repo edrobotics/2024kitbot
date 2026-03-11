@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
   public static ClimbSubsystem climber = new ClimbSubsystem();
   public static VisionSubsystem vision = new VisionSubsystem();
   public static IntakeSmartArmsCommand intakeSmartArmsCommand = new IntakeSmartArmsCommand();
+  public static IntakeSmartArmsCommand intakeArmsCommand = new IntakeSmartArmsCommand();
   public static ClimbCommand climbCommand = new ClimbCommand();
   public static OI m_oi;
 

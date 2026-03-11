@@ -15,6 +15,9 @@ public class ClimbCommand extends Command {
   public ClimbCommand() {
     addRequirements(Robot.climber);
   }
+  boolean buttonEncoderMotorWasPressed = false;
+  boolean climberPriority = false; // if true, the climb encoder motor will have priority over the intake arms encoder motor
+  boolean toggle = true;
 
   @Override
   public void execute() {
