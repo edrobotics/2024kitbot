@@ -15,33 +15,31 @@ public class OI {
   // Names are matched against the string the driver station reports for the HID.
   // Add more entries here if you connect a different controller model.
 
-  public enum ControllerType { PS4, LOGITECH, XBOX }
-
   private final GenericHID pilotController   = new GenericHID(Constants.CONTROL_PILOT_ID);
   private final GenericHID copilotController = new GenericHID(Constants.CONTROL_COPILOT_ID);
 
-  public final ControllerType pilotType;
-  public final ControllerType copilotType;
+  public final Constants.ControllerType pilotType;
+  public final Constants.ControllerType copilotType;
 
   public OI() {
-    pilotType   = detectType(pilotController, ControllerType.XBOX);
-    copilotType = detectType(copilotController, ControllerType.XBOX);
+    pilotType   = detectType(pilotController, Constants.ControllerType.XBOX);
+    copilotType = detectType(copilotController, Constants.ControllerType.XBOX);
     
     // Publish detected types so you can verify in the dashboard
     SmartDashboard.putString("Pilot Controller",   pilotType.name());
     SmartDashboard.putString("Copilot Controller", copilotType.name());
   }
 
-  private static ControllerType detectType(GenericHID hid, ControllerType useIfNotFound) {
+  private static Constants.ControllerType detectType(GenericHID hid, Constants.ControllerType useIfNotFound) {
     String name = hid.getName().toLowerCase();
     if (name.contains("wireless controller") || name.contains("dualshock") || name.contains("ps4")) {
-      return ControllerType.PS4;
+      return Constants.ControllerType.PS4;
     }
     else if (name.contains("logitech")) {
-      return ControllerType.LOGITECH;
+      return Constants.ControllerType.LOGITECH;
     }
     else if(name.contains("xbox")) {
-      return ControllerType.XBOX;
+      return Constants.ControllerType.XBOX;
     }
     else {
       return useIfNotFound;
@@ -53,13 +51,13 @@ public class OI {
 
   /** Steering input [-1, 1]. PS4 applies quadratic shaping; Logitech is linear. */
   public double getPilotSteering() {
-    if(pilotType == ControllerType.PS4) {
+    if(pilotType == Constants.ControllerType.PS4) {
       return getPilotRawAxis(Constants.ps4_leftStickX);
     }
-    else if(pilotType == ControllerType.LOGITECH) {
+    else if(pilotType == Constants.ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_leftStickX);
     }
-    else if(pilotType == ControllerType.XBOX) {
+    else if(pilotType == Constants.ControllerType.XBOX) {
       return getPilotRawAxis(Constants.xbox_leftStickX);
     }
     else {
@@ -74,17 +72,17 @@ public class OI {
    * Logitech: digital trigger buttons, full [-1, 1] range.
    */
   public double getPilotThrottle() {
-    if(pilotType == ControllerType.PS4) {
+    if(pilotType == Constants.ControllerType.PS4) {
       double lt = getPilotRawAxis(Constants.ps4_leftTrigger);
       double rt = getPilotRawAxis(Constants.ps4_rightTrigger);
       return (rt-lt)/2;
     }
-    else if(pilotType == ControllerType.LOGITECH) {
+    else if(pilotType == Constants.ControllerType.LOGITECH) {
       double lt = pilotController.getRawButton(Constants.logitech_buttonLT) ? 1 : 0;
       double rt = pilotController.getRawButton(Constants.logitech_buttonRT) ? 1 : 0;
       return rt - lt;
     }
-    else if(pilotType == ControllerType.XBOX) {
+    else if(pilotType == Constants.ControllerType.XBOX) {
       double lt = getPilotRawAxis(Constants.xbox_leftTrigger);
       double rt = getPilotRawAxis(Constants.xbox_rightTrigger);
       return rt - lt;
@@ -97,13 +95,13 @@ public class OI {
 
   /** Left stick Y axis, used for the left side in tank drive. */
   public double getPilotLeftStickY() {
-    if(pilotType == ControllerType.PS4) {
+    if(pilotType == Constants.ControllerType.PS4) {
       return getPilotRawAxis(Constants.ps4_leftStickY);
     }
-    else if(pilotType == ControllerType.LOGITECH) {
+    else if(pilotType == Constants.ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_leftStickY);
     }
-    else if(pilotType == ControllerType.XBOX) {
+    else if(pilotType == Constants.ControllerType.XBOX) {
       return getPilotRawAxis(Constants.xbox_leftStickY);
     }
     else {
@@ -114,13 +112,13 @@ public class OI {
 
   /** Right stick Y axis, used for the right side in tank drive. */
   public double getPilotRightStickY() {
-    if(pilotType == ControllerType.PS4) {
+    if(pilotType == Constants.ControllerType.PS4) {
       return getPilotRawAxis(Constants.ps4_rightStickY);
     }
-    else if(pilotType == ControllerType.LOGITECH) {
+    else if(pilotType == Constants.ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_rightStickY);
     }
-    else if(pilotType == ControllerType.XBOX) {
+    else if(pilotType == Constants.ControllerType.XBOX) {
       return getPilotRawAxis(Constants.xbox_rightStickY);
     }
     else {
@@ -133,13 +131,13 @@ public class OI {
 
   /** Intake-in button. PS4: Circle. Logitech: B. */
   public boolean getCopilotIntakeIn() {
-    if(copilotType == ControllerType.PS4) {
+    if(copilotType == Constants.ControllerType.PS4) {
       return getCopilotRawButton(Constants.ps4_buttonCircle);
     }
-    else if(copilotType == ControllerType.LOGITECH) {
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonB);
     }
-    else if(copilotType == ControllerType.XBOX) {
+    else if(copilotType == Constants.ControllerType.XBOX) {
       return getCopilotRawButton(Constants.xbox_buttonB);
     }
     else {
@@ -150,13 +148,13 @@ public class OI {
 
   /** Intake-out button. PS4: Square. Logitech: X. */
   public boolean getCopilotIntakeOut() {
-    if(copilotType == ControllerType.PS4) {
+    if(copilotType == Constants.ControllerType.PS4) {
       return getCopilotRawButton(Constants.ps4_buttonSquare);
     }
-    else if(copilotType == ControllerType.LOGITECH) {
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonX);
     }
-    else if(copilotType == ControllerType.XBOX) {
+    else if(copilotType == Constants.ControllerType.XBOX) {
       return getCopilotRawButton(Constants.xbox_buttonX);
     }
     else {
@@ -168,19 +166,42 @@ public class OI {
   /** Intake arms toggle button. PS4: Triangle. Logitech: Y. */
   private boolean intakeArmWasPressed = false;
   public boolean getCopilotIntakeArms() {
-    if(copilotType == ControllerType.PS4) {
+    if(copilotType == Constants.ControllerType.PS4) {
       boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonTriangle);
       intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonTriangle);
       return returnValue;
     }
-    else if(copilotType == ControllerType.LOGITECH) {
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
       boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonY);
       intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonY);
       return returnValue;
     }
-    else if(copilotType == ControllerType.XBOX) {
+    else if(copilotType == Constants.ControllerType.XBOX) {
       boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonY);
       intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonY);
+      return returnValue;
+    }
+    else {
+      Functions.printInTerminal("Copilot controller type not supported");
+      return false;
+    }
+  }
+
+  private boolean climberWasPressed = false;
+  public boolean getCopilotClimber() {
+    if(copilotType == Constants.ControllerType.PS4) {
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonX);
+      intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonX);
+      return returnValue;
+    }
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonA);
+      intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonA);
+      return returnValue;
+    }
+    else if(copilotType == Constants.ControllerType.XBOX) {
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonA);
+      intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonA);
       return returnValue;
     }
     else {

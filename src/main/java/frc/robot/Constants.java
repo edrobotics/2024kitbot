@@ -67,14 +67,17 @@ public final class Constants {
   );
 
   //Climber
-  public static final int CLIMB_WINCH_MOTOR_ID = 8; // the id of the motor which will power the climb, wont use encoder position because of high gearing + winch design
-  public static final int CLIMB_ENCODER_MOTOR_ID = 9; // the id of the motor whose job it is to keep the climb arm stowed away when nessessary, come up with a better name if you can
-  public static final double CLIMB_UP_SPEED = 0.1;
-  public static final double CLIMB_DOWN_SPEED = -0.03;
-  public static final double CLIMB_MOTOR_GEARING = 1; // the gearing of the climb motor
+  public static final int CLIMBER_WINCH_MOTOR_ID = 8; // the id of the motor which will power the climb, wont use encoder position because of high gearing + winch design
+  public static final int CLIMBER_ENCODER_MOTOR_ID = 9; // the id of the motor whose job it is to keep the climb arm stowed away when nessessary, come up with a better name if you can
+
+  public static final double CLIMBER_WINCH_UP_SPEED = 0.1;     //Speed of the winch going up
+  public static final double CLIMBER_WINCH_DOWN_SPEED = -0.03; //Speed of the winch going down
+  public static final double CLIMBER_WINCH_HOLD_IN_PLACE = 0.07; //Input to hold the climber in place
+  public static final double CLIMBER_ENCODER_SPEED = 0.5; //Speed of the climber encoder motor;
+
+  public static final double CLIMBER_MOTOR_GEARING = 1; // the gearing of the climb motor
   public static final double CLIMBER_TARGET_ROTATIONS = 0.75; // the target rotations for the climb encoder motor to reach when stowing/un-stowing the climb arm
   public static final double CLIMBER_DEADBAND = 0.05; // the deadband for the climb encoder motor, to prevent it from jittering when it reaches the target position
-  public static final double CLIMB_ENCODER_SPEED = 0.2; // the speed of the climb encoder motor
 
   //Controller
   public static final int CONTROL_PILOT_ID = 0;
@@ -144,4 +147,8 @@ public final class Constants {
   public static final int xbox_buttonStart = 8;
   public static final int xbox_buttonLeftStick = 9;
   public static final int xbox_buttonRightStick = 10;
+
+  //Enums
+  public static enum ControllerType { PS4, LOGITECH, XBOX }
+  public static enum ArmPriority { INTAKE, CLIMBER }
 }

@@ -16,8 +16,8 @@ import frc.robot.Constants;
 import frc.robot.Functions;
 
 public class ClimbSubsystem extends SubsystemBase {
-  private final SparkMax climbWinchMotor = new SparkMax(Constants.CLIMB_WINCH_MOTOR_ID, MotorType.kBrushless);
-  private final SparkFlex climbEncoderMotor = new SparkFlex(Constants.CLIMB_ENCODER_MOTOR_ID, MotorType.kBrushless);
+  private final SparkMax climbWinchMotor = new SparkMax(Constants.CLIMBER_WINCH_MOTOR_ID, MotorType.kBrushless);
+  private final SparkFlex climbEncoderMotor = new SparkFlex(Constants.CLIMBER_ENCODER_MOTOR_ID, MotorType.kBrushless);
 
   private final RelativeEncoder climbEncoderMotorEncoder = climbEncoderMotor.getEncoder();
 

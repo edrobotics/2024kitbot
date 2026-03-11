@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Functions;
 import frc.robot.Robot;
 
 public class GTADrive extends Command {
@@ -22,6 +23,7 @@ public class GTADrive extends Command {
 
     Robot.driveTrain.setLeftMotorsSmoothly(speed + steering);
     Robot.driveTrain.setRightMotorsSmoothly(speed - steering);
+    Functions.printInTerminal(speed+steering);
   }
 
   @Override

@@ -38,8 +38,10 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static Intake intake = new Intake();
   public static IntakeArms intakeArms = new IntakeArms();
-  public static ClimbSubsystem climb = new ClimbSubsystem();
+  public static ClimbSubsystem climber = new ClimbSubsystem();
   public static VisionSubsystem vision = new VisionSubsystem();
+  public static IntakeSmartArmsCommand intakeSmartArmsCommand = new IntakeSmartArmsCommand();
+  public static ClimbCommand climbCommand = new ClimbCommand();
   public static OI m_oi;
 
   private Pose3d poseA = new Pose3d();
@@ -63,7 +65,7 @@ public class Robot extends TimedRobot {
     driveTrain.setDefaultCommand(new GTADrive());
     intake.setDefaultCommand(new PickUpFuel());
     intakeArms.setDefaultCommand(new IntakeSmartArmsCommand());
-    climb.setDefaultCommand(new ClimbCommand());
+    climber.setDefaultCommand(new ClimbCommand());
     //gyroscope.setDefaultCommand(new DeadReck());
 
     publisher = NetworkTableInstance.getDefault()

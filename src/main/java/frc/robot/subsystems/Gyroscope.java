@@ -19,7 +19,7 @@ public class Gyroscope extends SubsystemBase {
   @Override
   public void periodic() {}
 
-  private AHRS navx = new AHRS(NavXComType.kUSB1);
+  private AHRS navx = new AHRS(NavXComType.kMXP_SPI);
   
   /**
    * Returns the robot's current heading as a Rotation2d.

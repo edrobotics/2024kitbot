@@ -28,4 +28,6 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(speed);
     //intakeMotor.set(VictorSPXControlMode.PercentOutput, speed);
   }
+
+  public Constants.ArmPriority armPriority = Constants.ArmPriority.INTAKE;
 }
