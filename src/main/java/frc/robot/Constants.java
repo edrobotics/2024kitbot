@@ -30,8 +30,8 @@ public final class Constants {
   public static final double DRIVE_KD = 0.0;
   // encoder stuff for neos
   public static final double DRIVETRAIN_GEARING = 9.13; // kitbot gearing
-  public static final double ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / DRIVETRAIN_GEARING;
-  public static final double ENCODER_VELOCITY_CONVERSION = ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
+  public static final double DRIVETRAIN_ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / DRIVETRAIN_GEARING;
+  public static final double DRIVETRAIN_ENCODER_VELOCITY_CONVERSION = DRIVETRAIN_ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
   // for smoother driving
   public static final double DRIVETRAIN_MIN_INPUT = 0.1;  // the minimum input that is given for the drivetrain
   public static final double DRIVETRAIN_MAX_INPUT_AT = 1; // at this speed the input is not reduced anymore
@@ -52,7 +52,7 @@ public final class Constants {
   public static final int rightIntakeMotorArmID = 7;
   public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.2; // rotation target per toggle
   public static final double INTAKE_ARMS_SPEED = 0.2; // motor speed for intake arms
-  public static final double Intake_Arms_GEARING = 1;
+  public static final double INTAKE_ARMS_GEARING = 1;
   public static final double INTAKE_ARMS_SPEED_REDUCTION = 0.2; // pecentage of minimum speed for the motor when approaching the target position
   public static final double INTAKE_ARMS_DEADBAND = 0.05;
 
@@ -132,10 +132,10 @@ public final class Constants {
   // The logitech controllers can be turned into an xbox with a switch on the lower side. D=logitech, X=xbox
   public static final int xbox_leftStickX = 0;
   public static final int xbox_leftStickY = 1;
-  public static final int xbox_leftTrigger = 2;
-  public static final int xbox_rightTrigger = 3;
-  public static final int xbox_rightStickX = 4;
-  public static final int xbox_rightStickY = 5;
+  public static final int xbox_rightStickX = 2;
+  public static final int xbox_rightStickY = 3;
+  public static final int xbox_leftTrigger = 4;
+  public static final int xbox_rightTrigger = 5;
 
   public static final int xbox_buttonA = 1;
   public static final int xbox_buttonB = 2;

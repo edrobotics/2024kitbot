@@ -6,7 +6,7 @@ import frc.robot.Functions;
 import frc.robot.Robot;
  
 public class IntakeSmartArmsCommand extends Command {
-    private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
+    public boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
  
     public IntakeSmartArmsCommand() {
       addRequirements(Robot.intakeArms);
@@ -18,18 +18,43 @@ public class IntakeSmartArmsCommand extends Command {
  
     @Override
     public void execute() {
-      boolean buttonIntakeArms = Robot.m_oi.getCopilotIntakeArms();
-      double position = Robot.intakeArms.getPosition();
- 
-      positiveDirection = buttonIntakeArms ? !positiveDirection : positiveDirection; // toggle direction if button is pressed
-      //Sets either positive or negative target rotations
-      double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS*Constants.Intake_Arms_GEARING : 0;
+      double manualDrive = Robot.m_oi.getCopilotManualIntakeArms();
+      if(Math.abs(manualDrive) > 0.1) {
+        Robot.intakeArms.setLeftIntakeArmsMotor(manualDrive*0.1);
+        Robot.intakeArms.setRightIntakeArmsMotor(manualDrive*0.1);
+        Robot.driveIntakeArmsManually = true;
+      }
+      else if(Robot.driveIntakeArmsManually) {
+        Robot.intakeArms.setLeftIntakeArmsMotor(0);
+        Robot.intakeArms.setRightIntakeArmsMotor(0);
+      }
 
-      boolean intakePriority = Robot.intake.armPriority == Constants.ArmPriority.INTAKE;
-      boolean climberIn = Functions.roundToDecimalPlaces(Robot.climber.getPosition(),2) == 0;
-      boolean intakeAllowed = climberIn || intakePriority;
+      boolean buttonIntakeArms = Robot.m_oi.getCopilotClimber();
+      if(buttonIntakeArms && Robot.driveIntakeArmsManually) {
+        Robot.driveIntakeArmsManually = false;
+        positiveDirection = false;
+      }
+      if(!Robot.driveIntakeArmsManually) {
+        //double rightPosition = Robot.intakeArms.getRightPosition();
+        //double leftPosition = Robot.intakeArms.getLeftPosition();
+        boolean climberIn = Functions.roundToDecimalPlaces(Robot.climber.getPosition(),2) == 0; // returns true when climber arms are retracted
 
-      Robot.intakeArms.setIntakeArmsMotors(Math.abs(targetRotations - position) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations - position) : 0);
+        // makes the intake arms return to zero if climber arms is out
+        if (!climberIn && buttonIntakeArms) {
+          positiveDirection = false;
+        }
+
+        // toggles the intake arms if climber arms are in
+        if (climberIn && buttonIntakeArms) {
+          positiveDirection = !positiveDirection;
+        }
+        //double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0;
+      
+        //Robot.intakeArms.setRightIntakeArmsMotor(Math.abs(targetRotations + rightPosition) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations + rightPosition) : 0);
+        //Robot.intakeArms.setLeftIntakeArmsMotor(Math.abs(targetRotations - leftPosition) > Constants.INTAKE_ARMS_DEADBAND ? Constants.INTAKE_ARMS_SPEED * (targetRotations - leftPosition) : 0);
+
+        Robot.intakeArms.rotateIntakeArms(positiveDirection); // rotates intake arms to either be up (positiveDirection == false) or down (positiveDirection == true)
+      }
     }
  
     @Override

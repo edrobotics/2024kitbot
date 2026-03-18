@@ -21,21 +21,37 @@ public class ClimbCommand extends Command {
 
   @Override
   public void execute() {
+    double manualDrive = Robot.m_oi.getCopilotManualClimber();
+    if(Math.abs(manualDrive) > 0.1) {
+      Robot.climber.runWinch(manualDrive*0.1);
+      Robot.climber.runEncoderMotor(manualDrive*0.1);
+      Robot.driveClimberManually = true;
+    }
+    else if(Robot.driveClimberManually) {
+      Robot.climber.runWinch(0);
+      Robot.climber.runEncoderMotor(0);
+    }
+
     boolean buttonClimber = Robot.m_oi.getCopilotClimber();
-    double position = Robot.climber.getPosition();
+    Functions.printInTerminal(buttonClimber);
+    if(buttonClimber && Robot.driveClimberManually) {
+      Robot.driveClimberManually = false;
+      positiveDirection = false;
+    }
+    if(!Robot.driveClimberManually) {
+      boolean intakeIn = Functions.roundToDecimalPlaces(Robot.intakeArms.getPosition(),2) == 0;
 
-    //Change the direction if the button is pressed
-    positiveDirection = buttonClimber ? !positiveDirection : positiveDirection;
+      if(!intakeIn && buttonClimber) {
+        positiveDirection = false;
+      }
+      else if(intakeIn && buttonClimber) {
+        positiveDirection = !positiveDirection;
+      }
 
-    double targetRotations = positiveDirection ? Constants.CLIMBER_TARGET_ROTATIONS : 0;
+      Robot.climber.rotateClimbArms(positiveDirection);
+    }
 
-    boolean climberPriority = Robot.intake.armPriority == Constants.ArmPriority.INTAKE;
-    boolean intakeIn = Functions.roundToDecimalPlaces(Robot.intakeArms.getPosition(),2) == 0;
-    boolean climbingAllowed = intakeIn || climberPriority;
-    double winchSpeed = climbingAllowed ? (positiveDirection ? Constants.CLIMBER_WINCH_UP_SPEED : Constants.CLIMBER_WINCH_DOWN_SPEED) : Constants.CLIMBER_WINCH_HOLD_IN_PLACE;
 
-    Robot.climber.runWinch(winchSpeed);
-    Robot.climber.runEncoderMotor(Math.abs(targetRotations - position) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.CLIMBER_ENCODER_SPEED * (targetRotations - position) : 0);
   }
 
   @Override

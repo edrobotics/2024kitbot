@@ -20,7 +20,7 @@ public class PickUpFuel extends Command {
     boolean intakeIn  = Robot.m_oi.getCopilotIntakeIn();
     boolean intakeOut = Robot.m_oi.getCopilotIntakeOut();
     // XOR: if both pressed at once, do nothing; otherwise run in the appropriate direction
-    Robot.intake.setIntakeMotor(intakeIn ^ intakeOut ? (intakeIn ? 1 : -1) : 0);
+    Robot.intake.setIntakeMotor(Robot.intakeSmartArmsCommand.positiveDirection ? (intakeIn ^ intakeOut ? (intakeIn ? 1 : -1) : 0) : 0); // won't run the intake motor when arms are up
   }
 
   @Override

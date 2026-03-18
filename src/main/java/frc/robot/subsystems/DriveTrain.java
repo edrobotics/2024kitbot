@@ -44,15 +44,6 @@ public class DriveTrain extends SubsystemBase {
   private final SparkMax leftMotor2  = new SparkMax(Constants.LMOTOR2ID,  MotorType.kBrushless);
   private final SparkMax rightMotor1 = new SparkMax(Constants.RMOTOR1ID, MotorType.kBrushless);
   private final SparkMax rightMotor2 = new SparkMax(Constants.RMOTOR2ID, MotorType.kBrushless);
-
-  // TODO: Encoders are disabled because the drivetrain uses brushed motors, which
-  //       cannot use the SparkMax's built-in relative encoder. To re-enable odometry:
-  //       1. Wire external quadrature encoders into the SparkMax encoder ports.
-  //       2. Uncomment the two encoder fields below.
-  //       3. Restore encoder reads in getLeftDistanceMeters(), getRightDistanceMeters(),
-  //          resetEncoders(), and getWheelSpeeds().
-  //       4. (Optional) Once a VisionSubsystem is providing AprilTag poses, feed them
-  //          into a DifferentialDrivePoseEstimator to fuse vision + wheel odometry.
   
   private final RelativeEncoder leftEncoder  = leftMotor1.getEncoder();
   private final RelativeEncoder rightEncoder = rightMotor1.getEncoder();
@@ -92,8 +83,8 @@ public class DriveTrain extends SubsystemBase {
     // Configure encoder conversion factors on the leader motors so that position
     // and velocity readings are already in meters / meters-per-second.
     SparkMaxConfig encoderConfig = new SparkMaxConfig();
-    encoderConfig.encoder.positionConversionFactor(Constants.ENCODER_POSITION_CONVERSION);
-    encoderConfig.encoder.velocityConversionFactor(Constants.ENCODER_VELOCITY_CONVERSION);
+    encoderConfig.encoder.positionConversionFactor(Constants.DRIVETRAIN_ENCODER_POSITION_CONVERSION);
+    encoderConfig.encoder.velocityConversionFactor(Constants.DRIVETRAIN_ENCODER_VELOCITY_CONVERSION);
 
     leftMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -167,15 +158,15 @@ public class DriveTrain extends SubsystemBase {
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
     speed = Functions.clamp(speed);
-    leftMotor1.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    leftMotor2.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    leftMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    leftMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
     speed = Functions.clamp(speed);
-    rightMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    rightMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    rightMotor1.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    rightMotor2.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   public void setLeftMotorsSmoothly(double speed) {

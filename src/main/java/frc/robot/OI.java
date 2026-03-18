@@ -71,7 +71,7 @@ public class OI {
    * PS4: analog triggers (right = forward, left = reverse), halved to stay in range.
    * Logitech: digital trigger buttons, full [-1, 1] range.
    */
-  public double getPilotThrottle() {
+  public double getPilotThrottle() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     if(pilotType == Constants.ControllerType.PS4) {
       double lt = getPilotRawAxis(Constants.ps4_leftTrigger);
       double rt = getPilotRawAxis(Constants.ps4_rightTrigger);
@@ -167,41 +167,57 @@ public class OI {
   private boolean intakeArmWasPressed = false;
   public boolean getCopilotIntakeArms() {
     if(copilotType == Constants.ControllerType.PS4) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonTriangle);
-      intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonTriangle);
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonCircle);
+      intakeArmWasPressed = getCopilotRawButton(Constants.ps4_buttonCircle);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonY);
-      intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonY);
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.logitech_buttonB);
+      intakeArmWasPressed = getCopilotRawButton(Constants.logitech_buttonB);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonY);
-      intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonY);
+      boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.xbox_buttonB);
+      intakeArmWasPressed = getCopilotRawButton(Constants.xbox_buttonB);
       return returnValue;
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");
       return false;
+    }
+  }
+
+  public double getCopilotManualIntakeArms() {
+    if(copilotType == Constants.ControllerType.PS4) {
+      return getCopilotRawAxis(Constants.ps4_leftStickY);
+    }
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
+      return getCopilotRawAxis(Constants.logitech_leftStickY);
+    }
+    else if(copilotType == Constants.ControllerType.XBOX) {
+      return getCopilotRawAxis(Constants.xbox_leftStickY);
+    }
+    else {
+      Functions.printInTerminal("Copilot controller type not supported");
+      return 0;
     }
   }
 
   private boolean climberWasPressed = false;
   public boolean getCopilotClimber() {
     if(copilotType == Constants.ControllerType.PS4) {
-      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.ps4_buttonX);
-      climberWasPressed = getCopilotRawButton(Constants.ps4_buttonX);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.ps4_buttonTriangle);
+      climberWasPressed = getCopilotRawButton(Constants.ps4_buttonTriangle);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
-      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.logitech_buttonA);
-      climberWasPressed = getCopilotRawButton(Constants.logitech_buttonA);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.logitech_buttonY);
+      climberWasPressed = getCopilotRawButton(Constants.logitech_buttonY);
       return returnValue;
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.xbox_buttonA);
-      climberWasPressed = getCopilotRawButton(Constants.xbox_buttonA);
+      boolean returnValue = !climberWasPressed && getCopilotRawButton(Constants.xbox_buttonY);
+      climberWasPressed = getCopilotRawButton(Constants.xbox_buttonY);
       return returnValue;
     }
     else {
@@ -210,10 +226,26 @@ public class OI {
     }
   }
 
+  public double getCopilotManualClimber() {
+    if(copilotType == Constants.ControllerType.PS4) {
+      return getCopilotRawAxis(Constants.ps4_rightStickY);
+    }
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
+      return getCopilotRawAxis(Constants.logitech_rightStickY);
+    }
+    else if(copilotType == Constants.ControllerType.XBOX) {
+      return getCopilotRawAxis(Constants.xbox_rightStickY);
+    }
+    else {
+      Functions.printInTerminal("Copilot controller type not supported");
+      return 0;
+    }
+  }
+
   // ── Low-level pass-throughs ──────────────────────────────────────────────
   // Kept so any code that needs a specific raw axis/button can still reach it.
   public double  getPilotRawAxis(int axis)       { return pilotController.getRawAxis(axis); }
-  public boolean getPilotRawButton(int button) { return pilotController.getRawButton(button); }
+  public boolean getPilotRawButton(int button)   { return pilotController.getRawButton(button); }
   public int     getPilotPOV()                   { return pilotController.getPOV(); }
   public double  getCopilotRawAxis(int axis)     { return copilotController.getRawAxis(axis); }
   public boolean getCopilotRawButton(int button) { return copilotController.getRawButton(button); }

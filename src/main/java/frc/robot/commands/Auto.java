@@ -23,9 +23,10 @@ public class Auto extends Command {
   @Override
   public void execute() {
     long currentTime = System.currentTimeMillis();
-    if (currentTime - startTime < Constants.AUTO_DRIVE_TIME_MS) {
-      Robot.driveTrain.setLeftMotors(Constants.AUTO_DRIVE_SPEED);
-      Robot.driveTrain.setRightMotors(Constants.AUTO_DRIVE_SPEED);
+    if (currentTime - startTime < Constants.AUTO_TIME) {
+      // rotates the intake arms during auto, rotating them down from 4 seconds to 13 seconds into the match
+      boolean positiveDirection = currentTime - startTime > 4000 && currentTime - startTime < 13000;
+      Robot.intakeArms.rotateIntakeArms(positiveDirection);
     } else {
       Robot.driveTrain.stop();
     }
