@@ -22,8 +22,11 @@ public class OI {
   public final Constants.ControllerType copilotType;
 
   public OI() {
-    pilotType   = detectType(pilotController, Constants.ControllerType.XBOX);
-    copilotType = detectType(copilotController, Constants.ControllerType.XBOX);
+    //pilotType   = detectType(pilotController, Constants.ControllerType.XBOX);
+    //copilotType = detectType(copilotController, Constants.ControllerType.XBOX);
+
+    pilotType = Constants.ControllerType.PS4;
+    copilotType = Constants.ControllerType.XBOX;
     
     // Publish detected types so you can verify in the dashboard
     SmartDashboard.putString("Pilot Controller",   pilotType.name());
@@ -132,13 +135,13 @@ public class OI {
   /** Intake-in button. PS4: Circle. Logitech: B. */
   public boolean getCopilotIntakeIn() {
     if(copilotType == Constants.ControllerType.PS4) {
-      return getCopilotRawButton(Constants.ps4_buttonCircle);
+      return getCopilotRawButton(Constants.ps4_buttonR2);
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonB);
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      return getCopilotRawButton(Constants.xbox_buttonB);
+      return getCopilotRawAxis(Constants.xbox_rightTrigger) > 0;
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");
@@ -149,13 +152,13 @@ public class OI {
   /** Intake-out button. PS4: Square. Logitech: X. */
   public boolean getCopilotIntakeOut() {
     if(copilotType == Constants.ControllerType.PS4) {
-      return getCopilotRawButton(Constants.ps4_buttonSquare);
+      return getCopilotRawButton(Constants.ps4_buttonL2);
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
       return getCopilotRawButton(Constants.logitech_buttonX);
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      return getCopilotRawButton(Constants.xbox_buttonX);
+      return getCopilotRawAxis(Constants.xbox_leftTrigger) > 0;
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");

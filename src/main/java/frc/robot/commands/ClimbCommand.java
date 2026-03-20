@@ -10,7 +10,7 @@ import frc.robot.Functions;
 import frc.robot.Robot;
 
 public class ClimbCommand extends Command {
-  private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
+  private boolean positiveDirection = false; // true for 90 degrees, false for -90 degrees
 
   public ClimbCommand() {
     addRequirements(Robot.climber);
@@ -20,11 +20,17 @@ public class ClimbCommand extends Command {
   boolean toggle = true;
 
   @Override
+  public void initialize() {
+    positiveDirection = false;
+  }
+
+  @Override
   public void execute() {
     double manualDrive = Robot.m_oi.getCopilotManualClimber();
+    
     if(Math.abs(manualDrive) > 0.1) {
-      Robot.climber.runWinch(manualDrive*0.1);
-      Robot.climber.runEncoderMotor(manualDrive*0.1);
+      Robot.climber.runWinch(manualDrive*0.3);
+      Robot.climber.runEncoderMotor(manualDrive*0.3);
       Robot.driveClimberManually = true;
     }
     else if(Robot.driveClimberManually) {
@@ -32,8 +38,10 @@ public class ClimbCommand extends Command {
       Robot.climber.runEncoderMotor(0);
     }
 
+    /*
     boolean buttonClimber = Robot.m_oi.getCopilotClimber();
     Functions.printInTerminal(buttonClimber);
+    
     if(buttonClimber && Robot.driveClimberManually) {
       Robot.driveClimberManually = false;
       positiveDirection = false;
@@ -47,12 +55,13 @@ public class ClimbCommand extends Command {
       else if(intakeIn && buttonClimber) {
         positiveDirection = !positiveDirection;
       }
+    */
 
-      Robot.climber.rotateClimbArms(positiveDirection);
+      //Robot.climber.rotateClimbArms(positiveDirection, 0.75 * Constants.CLIMBER_MOTOR_GEARING);
     }
 
 
-  }
+  
 
   @Override
   public void end(boolean interrupted) {

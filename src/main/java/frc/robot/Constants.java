@@ -19,7 +19,7 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.5;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 1;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -36,22 +36,28 @@ public final class Constants {
   public static final double DRIVETRAIN_MIN_INPUT = 0.1;  // the minimum input that is given for the drivetrain
   public static final double DRIVETRAIN_MAX_INPUT_AT = 1; // at this speed the input is not reduced anymore
 
-  //Autonomous
+  //Autonomous (pathplanner, not working)
   public static final double LOOP_PERIOD_SECONDS = 0.02; // WPILib default scheduler period (20 ms)
   public static final double MAX_VELOCITY_MPS = 2.0;
   public static final double MAX_ACCELERATION_MPSS = 1.5;
   public static final double MAX_ANGULAR_VELOCITY_RAD = Math.PI;
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
-  public static final long AUTO_TIME = 20000; // in milliseconds
   public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
   public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
+
+  //Working auto
+  public static final double AUTO_TURN_SPEED = 0.5; // maximum turning speed during auto
+  public static final long AUTO_TIME = 20000; // in milliseconds
+  public static final long AUTO_ANGULAR_DEADBAND = 5;
 
   //Intake
   public static final int intakeMotorId = 5;
   public static final int leftIntakeMotorArmID = 6;
   public static final int rightIntakeMotorArmID = 7;
   public static final double INTAKE_ARMS_TARGET_ROTATIONS = 0.2; // rotation target per toggle
-  public static final double INTAKE_ARMS_SPEED = 0.2; // motor speed for intake arms
+  public static final double INTAKE_ARMS_DOWN_SPEED = 0.2; // motor speed for intake arms going upwards
+  public static final double INTAKE_ARMS_UP_SPEED = 1;
+  public static final double INTAKE_ARMS_SPEED = 0.75;
   public static final double INTAKE_ARMS_GEARING = 1;
   public static final double INTAKE_ARMS_SPEED_REDUCTION = 0.2; // pecentage of minimum speed for the motor when approaching the target position
   public static final double INTAKE_ARMS_DEADBAND = 0.05;
@@ -75,8 +81,7 @@ public final class Constants {
   public static final double CLIMBER_WINCH_HOLD_IN_PLACE = 0.07; //Input to hold the climber in place
   public static final double CLIMBER_ENCODER_SPEED = 0.5; //Speed of the climber encoder motor;
 
-  public static final double CLIMBER_MOTOR_GEARING = 1; // the gearing of the climb motor
-  public static final double CLIMBER_TARGET_ROTATIONS = 0.75; // the target rotations for the climb encoder motor to reach when stowing/un-stowing the climb arm
+  public static final double CLIMBER_MOTOR_GEARING = 125; // the gearing of the climb motor
   public static final double CLIMBER_DEADBAND = 0.05; // the deadband for the climb encoder motor, to prevent it from jittering when it reaches the target position
 
   //Controller
@@ -132,10 +137,10 @@ public final class Constants {
   // The logitech controllers can be turned into an xbox with a switch on the lower side. D=logitech, X=xbox
   public static final int xbox_leftStickX = 0;
   public static final int xbox_leftStickY = 1;
-  public static final int xbox_rightStickX = 2;
-  public static final int xbox_rightStickY = 3;
-  public static final int xbox_leftTrigger = 4;
-  public static final int xbox_rightTrigger = 5;
+  public static final int xbox_leftTrigger = 2;
+  public static final int xbox_rightTrigger = 3;
+  public static final int xbox_rightStickX = 4;
+  public static final int xbox_rightStickY = 5;
 
   public static final int xbox_buttonA = 1;
   public static final int xbox_buttonB = 2;

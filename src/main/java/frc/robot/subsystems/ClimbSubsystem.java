@@ -20,13 +20,17 @@ public class ClimbSubsystem extends SubsystemBase {
   private final SparkMax climbWinchMotor = new SparkMax(Constants.CLIMBER_WINCH_MOTOR_ID, MotorType.kBrushless);
   private final SparkFlex climbEncoderMotor = new SparkFlex(Constants.CLIMBER_ENCODER_MOTOR_ID, MotorType.kBrushless);
 
-  private final RelativeEncoder climbEncoderMotorEncoder = climbEncoderMotor.getEncoder();
+  private final RelativeEncoder climbVortexEncoder = climbEncoderMotor.getEncoder();
+  private final RelativeEncoder climbWinchEncoder = climbWinchMotor.getEncoder();
 
   public ClimbSubsystem() {}
 
-  public double getPosition() {
-    double position = climbEncoderMotorEncoder.getPosition();
-    return position;
+  public double getVortexPosition() {
+    return climbVortexEncoder.getPosition();
+  }
+
+  public double getWinchPosition() {
+    return climbWinchEncoder.getPosition();
   }
 
   public void runWinch(double speed) {
@@ -39,10 +43,9 @@ public class ClimbSubsystem extends SubsystemBase {
     climbEncoderMotor.set(speed);
   }
 
-  public void rotateClimbArms(boolean positiveDirection) {
-    double position = Robot.climber.getPosition();
+  public void rotateClimbArms(boolean positiveDirection, double targetRotations) {
+    double position = Robot.climber.getVortexPosition();
 
-    double targetRotations = positiveDirection ? Constants.CLIMBER_TARGET_ROTATIONS : 0;
     double winchSpeed = Functions.roundToDecimalPlaces(position, 2) == targetRotations ? Constants.CLIMBER_WINCH_HOLD_IN_PLACE * (positiveDirection ? 1 : 0) : (targetRotations > position ? Constants.CLIMBER_WINCH_UP_SPEED : Constants.CLIMBER_WINCH_DOWN_SPEED);
 
     Robot.climber.runWinch(winchSpeed);

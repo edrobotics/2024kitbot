@@ -42,9 +42,13 @@ public class Robot extends TimedRobot {
   public static VisionSubsystem vision = new VisionSubsystem();
   public static IntakeSmartArmsCommand intakeSmartArmsCommand = new IntakeSmartArmsCommand();
   public static IntakeSmartArmsCommand intakeArmsCommand = new IntakeSmartArmsCommand();
-  public static PickUpFuel pickUpFuel = new PickUpFuel();
+  //public static PickUpFuel pickUpFuel = new PickUpFuel();
   public static ClimbCommand climbCommand = new ClimbCommand();
   public static OI m_oi;
+
+  private Command m_autonomousCommand;
+  private Command auto = new Auto();
+  public static DeadReck deadReck = new DeadReck();
 
   public static boolean driveClimberManually = false;
   public static boolean driveIntakeArmsManually = false;
@@ -54,9 +58,6 @@ public class Robot extends TimedRobot {
 
   private StructPublisher<Pose3d> publisher;
   private StructArrayPublisher<Pose3d> arrayPublisher;
-
-  private Command m_autonomousCommand;
-  private Command deadReck = new DeadReck();
 
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -68,7 +69,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     driveTrain.setDefaultCommand(new GTADrive());
-    intake.setDefaultCommand(new PickUpFuel());
+    //intake.setDefaultCommand(new PickUpFuel());
     intakeArms.setDefaultCommand(new IntakeSmartArmsCommand());
     climber.setDefaultCommand(new ClimbCommand());
     //gyroscope.setDefaultCommand(new DeadReck());
@@ -103,16 +104,20 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // Only create a PathPlanner command if AutoBuilder was successfully configured
-    if (DriveTrain.isAutoBuilderConfigured()) {
-      m_autonomousCommand = new PathPlannerAuto("AutoA1");
+    /*if (DriveTrain.isAutoBuilderConfigured()) {
+      m_autonomousCommand = new PathPlannerAuto("TestingAuto");
     } else {
       SmartDashboard.putString("Auto Status", "AutoBuilder not configured - autonomous disabled");
       m_autonomousCommand = null;
-    }
-
+    }*/
+    m_autonomousCommand = new Auto();
+    
+    // Starts dead reckoning
+    deadReck.schedule();
+    auto.schedule();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+      //m_autonomousCommand.schedule();
     }
   }
 

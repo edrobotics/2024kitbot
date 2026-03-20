@@ -28,7 +28,7 @@ public class IntakeArms extends SubsystemBase {
     return rightEncoder.getPosition();
   }
   public double getLeftPosition() {
-    return leftEncoder.getPosition();
+    return -leftEncoder.getPosition();
   }
   public double getPosition() {
     return (leftEncoder.getPosition() - rightEncoder.getPosition())/2;
@@ -40,8 +40,8 @@ public class IntakeArms extends SubsystemBase {
     double leftPosition = Robot.intakeArms.getLeftPosition();
     double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0;
     
-    Robot.intakeArms.setRightIntakeArmsMotor(Math.abs(targetRotations + rightPosition) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations + rightPosition) : 0);
-    Robot.intakeArms.setLeftIntakeArmsMotor(Math.abs(targetRotations - leftPosition) > Constants.INTAKE_ARMS_DEADBAND ? Constants.INTAKE_ARMS_SPEED * (targetRotations - leftPosition) : 0);
+    Robot.intakeArms.setRightIntakeArmsMotor(Math.abs(targetRotations - rightPosition) > Constants.INTAKE_ARMS_DEADBAND ? (positiveDirection ? Constants.INTAKE_ARMS_DOWN_SPEED : Constants.INTAKE_ARMS_UP_SPEED) * (targetRotations - rightPosition)/Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0);
+    Robot.intakeArms.setLeftIntakeArmsMotor(Math.abs(targetRotations - leftPosition) > Constants.INTAKE_ARMS_DEADBAND ? (positiveDirection ? Constants.INTAKE_ARMS_DOWN_SPEED : Constants.INTAKE_ARMS_UP_SPEED) * (targetRotations - leftPosition)/Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0);
   }
   
   
@@ -64,10 +64,10 @@ public class IntakeArms extends SubsystemBase {
 
   // Do NOT touch the following function unless it is needed. It makes sure both the motors run in the same direction
   public void setRightIntakeArmsMotor(double speed) {
-    rightIntakeArmsMotor.set(Functions.clamp(speed, -0.5, 0.5));
+    rightIntakeArmsMotor.set(Functions.clamp(speed, -1, 1));
   }
   public void setLeftIntakeArmsMotor(double speed) {
-    leftIntakeArmsMotor.set(Functions.clamp(speed, -0.5, 0.5));
+    leftIntakeArmsMotor.set(Functions.clamp(-speed, -1, 1));
   }
   public void setIntakeArmsMotors(double speed) {
     setRightIntakeArmsMotor(speed);

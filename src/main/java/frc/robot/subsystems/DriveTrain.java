@@ -62,10 +62,10 @@ public class DriveTrain extends SubsystemBase {
     return leftEncoder.getVelocity();
   }
   public double getRightPosition() {
-    return rightEncoder.getPosition();
+    return -rightEncoder.getPosition();
   }
   public double getRightSpeed() {
-    return rightEncoder.getVelocity();
+    return -rightEncoder.getVelocity();
   }
 
   // ── Kinematics & Odometry ──────────────────────────────────────────────────
@@ -82,12 +82,16 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     // Configure encoder conversion factors on the leader motors so that position
     // and velocity readings are already in meters / meters-per-second.
-    SparkMaxConfig encoderConfig = new SparkMaxConfig();
-    encoderConfig.encoder.positionConversionFactor(Constants.DRIVETRAIN_ENCODER_POSITION_CONVERSION);
-    encoderConfig.encoder.velocityConversionFactor(Constants.DRIVETRAIN_ENCODER_VELOCITY_CONVERSION);
+    SparkMaxConfig leftEncoderConfig = new SparkMaxConfig();
+    leftEncoderConfig.encoder.positionConversionFactor(Constants.DRIVETRAIN_ENCODER_POSITION_CONVERSION);
+    leftEncoderConfig.encoder.velocityConversionFactor(Constants.DRIVETRAIN_ENCODER_VELOCITY_CONVERSION);
 
-    leftMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    rightMotor1.configure(encoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    SparkMaxConfig rightEncoderConfig = new SparkMaxConfig();
+    rightEncoderConfig.encoder.positionConversionFactor(Constants.DRIVETRAIN_ENCODER_POSITION_CONVERSION);
+    rightEncoderConfig.encoder.velocityConversionFactor(Constants.DRIVETRAIN_ENCODER_VELOCITY_CONVERSION);
+
+    leftMotor1.configure(leftEncoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightMotor1.configure(rightEncoderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     resetEncoders();
 
@@ -202,6 +206,20 @@ public class DriveTrain extends SubsystemBase {
   public void arcadeDrive(double xSpeed, double rotation) {
     setLeftMotors(xSpeed + rotation);
     setRightMotors(xSpeed - rotation);
+  }
+
+  public void autoRotate(double targetDeltaDegrees, double deltaDegrees) {
+    double speed = (targetDeltaDegrees-deltaDegrees)/Math.abs(targetDeltaDegrees);
+    setLeftMotors(speed*Constants.AUTO_TURN_SPEED+0.05);
+    setRightMotors(-speed*Constants.AUTO_TURN_SPEED+0.05);
+  }
+
+  public void autoDriveMotors(double targetX, double targetY, double currentX, double currentY, double startX, double startY) {
+    double totalDistance = Math.sqrt(Math.pow(startX - targetX, 2) + Math.pow(startY - targetY, 2));
+    double currentDistance = Math.sqrt(Math.pow(currentX - targetX, 2) + Math.pow(currentY - targetY, 2));
+    double speed = (currentDistance) / totalDistance;
+    setLeftMotors(speed+0.1);
+    setRightMotors(speed+0.1);
   }
 
   /**

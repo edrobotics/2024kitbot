@@ -7,7 +7,7 @@ import frc.robot.Robot;
 
 public class IntakeArmsCommand extends Command {
     private double targetRotations = Constants.INTAKE_ARMS_TARGET_ROTATIONS;
-    private double speed = Constants.INTAKE_ARMS_SPEED;
+    private double speed = Constants.INTAKE_ARMS_DOWN_SPEED;
     private boolean isRunning = false;
     private boolean shouldStart = false;
     private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees

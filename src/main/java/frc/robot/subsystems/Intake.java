@@ -16,7 +16,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   //The Victor SPX does not work in simulation, so if you want to simulate the code, use spark max instead
 
-  private SparkMax intakeMotor = new SparkMax(Constants.intakeMotorId, MotorType.kBrushed);
+  private SparkMax intakeMotor = new SparkMax(Constants.intakeMotorId, MotorType.kBrushless);
   //private VictorSPX intakeMotor = new VictorSPX(Constants.intakeMotorId);
 
   public Intake() {}
