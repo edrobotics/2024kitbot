@@ -162,15 +162,25 @@ public class DriveTrain extends SubsystemBase {
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
     speed = Functions.clamp(speed);
-    leftMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    leftMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    leftMotor1.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    leftMotor2.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
   public void setRightMotors(double speed) {
     speed = Functions.clamp(speed);
-    rightMotor1.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    rightMotor2.set(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    rightMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+    rightMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
+  }
+
+  public void setLeftMotorsBoosted(double speed) {
+    leftMotor1.set(Functions.clamp(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION));
+    leftMotor2.set(Functions.clamp(-speed * Constants.DRIVETRAIN_SPEED_REDUCTION));
+  }
+
+  public void setRightMotorsBoosted(double speed) {
+    rightMotor1.set(Functions.clamp(speed * Constants.DRIVETRAIN_SPEED_REDUCTION));
+    rightMotor2.set(Functions.clamp(speed * Constants.DRIVETRAIN_SPEED_REDUCTION));
   }
 
   public void setLeftMotorsSmoothly(double speed) {
@@ -218,8 +228,8 @@ public class DriveTrain extends SubsystemBase {
     double totalDistance = Math.sqrt(Math.pow(startX - targetX, 2) + Math.pow(startY - targetY, 2));
     double currentDistance = Math.sqrt(Math.pow(currentX - targetX, 2) + Math.pow(currentY - targetY, 2));
     double speed = (currentDistance) / totalDistance;
-    setLeftMotors(speed+0.1);
-    setRightMotors(speed+0.1);
+    setLeftMotorsSmoothly(speed+0.1);
+    setRightMotorsSmoothly(speed+0.1);
   }
 
   /**

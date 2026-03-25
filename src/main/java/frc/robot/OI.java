@@ -55,7 +55,7 @@ public class OI {
   /** Steering input [-1, 1]. PS4 applies quadratic shaping; Logitech is linear. */
   public double getPilotSteering() {
     if(pilotType == Constants.ControllerType.PS4) {
-      return getPilotRawAxis(Constants.ps4_leftStickX);
+      return Math.abs(getPilotRawAxis(Constants.ps4_leftStickX)) > Constants.DRIVE_DEADBAND ? getPilotRawAxis(Constants.ps4_leftStickX) : 0;
     }
     else if(pilotType == Constants.ControllerType.LOGITECH) {
       return getPilotRawAxis(Constants.logitech_leftStickX);
@@ -76,8 +76,8 @@ public class OI {
    */
   public double getPilotThrottle() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     if(pilotType == Constants.ControllerType.PS4) {
-      double lt = getPilotRawAxis(Constants.ps4_leftTrigger);
-      double rt = getPilotRawAxis(Constants.ps4_rightTrigger);
+      double lt = Math.abs(getPilotRawAxis(Constants.ps4_leftTrigger)) > Constants.DRIVE_DEADBAND ? getPilotRawAxis(Constants.ps4_leftTrigger) : 0;
+      double rt = Math.abs(getPilotRawAxis(Constants.ps4_rightTrigger)) > Constants.DRIVE_DEADBAND ? getPilotRawAxis(Constants.ps4_rightTrigger) : 0;
       return (rt-lt)/2;
     }
     else if(pilotType == Constants.ControllerType.LOGITECH) {
@@ -127,6 +127,11 @@ public class OI {
     else {
       Functions.printInTerminal("Pilot controller type not supported");
       return 0;
+    }
+  }
+  public boolean getPilotBoost() {
+    if (pilotType == Constants.ControllerType.PS4); {
+      return getPilotRawButton(Constants.ps4_buttonX);
     }
   }
 

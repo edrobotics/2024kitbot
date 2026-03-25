@@ -20,11 +20,12 @@ public class GTADrive extends Command {
   public void execute() {
     double steering = Robot.m_oi.getPilotSteering();
     double speed = Robot.m_oi.getPilotThrottle();
+    double boost = Robot.m_oi.getPilotBoost() ? 2 : 1;
 
-    Robot.driveTrain.setLeftMotors(speed + steering);
-    Robot.driveTrain.setRightMotors(speed - steering);
+    Robot.driveTrain.setLeftMotorsBoosted(speed * boost - steering);
+    Robot.driveTrain.setRightMotorsBoosted(speed * boost + steering);
+
   }
-
   @Override
   public void end(boolean interrupted) {
     Robot.driveTrain.stop();

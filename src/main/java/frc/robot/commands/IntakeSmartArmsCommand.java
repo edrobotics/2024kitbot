@@ -52,11 +52,13 @@ public class IntakeSmartArmsCommand extends Command {
         */
 
         // toggles the intake arms if climber arms are in
+        
         /*
-        if (climberIn && buttonIntakeArms) {
+        if (buttonIntakeArms) {
           positiveDirection = !positiveDirection;
         }
         */
+
         //double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0;
       
         //Robot.intakeArms.setRightIntakeArmsMotor(Math.abs(targetRotations - rightPosition) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations + rightPosition) : 0);

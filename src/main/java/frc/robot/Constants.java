@@ -19,7 +19,8 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double DRIVETRAIN_SPEED_REDUCTION = 1;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.5;
+  public static final double DRIVE_DEADBAND = 0.1;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)
   public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6.0); // 6" wheels
@@ -33,8 +34,8 @@ public final class Constants {
   public static final double DRIVETRAIN_ENCODER_POSITION_CONVERSION = WHEEL_CIRCUMFERENCE_METERS / DRIVETRAIN_GEARING;
   public static final double DRIVETRAIN_ENCODER_VELOCITY_CONVERSION = DRIVETRAIN_ENCODER_POSITION_CONVERSION / 60.0; // rpm to m/s
   // for smoother driving
-  public static final double DRIVETRAIN_MIN_INPUT = 0.1;  // the minimum input that is given for the drivetrain
-  public static final double DRIVETRAIN_MAX_INPUT_AT = 1; // at this speed the input is not reduced anymore
+  public static final double DRIVETRAIN_MIN_INPUT = 0.3;  // the minimum input that is given for the drivetrain
+  public static final double DRIVETRAIN_MAX_INPUT_AT = 0.5; // at this speed the input is not reduced anymore
 
   //Autonomous (pathplanner, not working)
   public static final double LOOP_PERIOD_SECONDS = 0.02; // WPILib default scheduler period (20 ms)

@@ -20,6 +20,7 @@ public class DeadReck extends Command {
     y = 0;
     lastLeftPosition = Robot.driveTrain.getLeftPosition();
     lastRightPosition = Robot.driveTrain.getRightPosition();
+    Robot.gyroscope.resetHeading();
   }
 
   public void execute () {
