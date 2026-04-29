@@ -32,4 +32,26 @@ public class Functions {
   public static double pythagoranTheorem(double xDistance, double yDistance) {
     return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
   }
+
+  public static double angularDifference(double angle1, double angle2)
+  {
+    double diff = angle1-angle2;
+    while(diff < -180) { diff += 360; }
+    while(diff > 180) { diff -= 360; }
+    return diff;
+  }
+  public static double headingTo(double fromX, double fromY, double toX, double toY)
+  {
+    double opposite = toX-fromX;
+    double adjacent = toY-fromY;
+    double heading;
+    if(adjacent == 0 && opposite > 0) { heading = 90; }
+    else if(adjacent == 0) { heading = -90; }
+    else
+    {
+      heading = Math.atan(opposite/adjacent)/Math.PI*180;
+    }
+    if(adjacent < 0) { heading += 180; }
+    return heading < 0 ? heading+360 : heading;
+  }
 }

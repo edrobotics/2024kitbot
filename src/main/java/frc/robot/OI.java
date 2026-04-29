@@ -25,7 +25,7 @@ public class OI {
     //pilotType   = detectType(pilotController, Constants.ControllerType.XBOX);
     //copilotType = detectType(copilotController, Constants.ControllerType.XBOX);
 
-    pilotType = Constants.ControllerType.PS4;
+    pilotType = Constants.ControllerType.XBOX;
     copilotType = Constants.ControllerType.XBOX;
     
     // Publish detected types so you can verify in the dashboard

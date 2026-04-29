@@ -19,7 +19,7 @@ public final class Constants {
   public static final int LMOTOR2ID = 2;
   public static final int RMOTOR1ID = 3;
   public static final int RMOTOR2ID = 4;
-  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.5;
+  public static final double DRIVETRAIN_SPEED_REDUCTION = 0.2;
   public static final double DRIVE_DEADBAND = 0.1;
   // robot dimensions - measure these on your actual robot!
   public static final double TRACK_WIDTH_METERS = 0.555; // distance between wheel centers (measured)

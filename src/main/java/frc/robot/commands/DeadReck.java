@@ -6,9 +6,7 @@ import frc.robot.Functions;
 import frc.robot.Robot;
 
 public class DeadReck extends Command {
-  public DeadReck () {
-    //addRequirements(Robot.driveTrain, Robot.gyroscope);
-  }
+  public DeadReck () {}
 
   private double x;
   private double y;
@@ -39,7 +37,7 @@ public class DeadReck extends Command {
     lastLeftPosition = currentLeftPosition;
     lastRightPosition = currentRightPosition;
 
-    //Functions.printInTerminal("x: " + x + ", y: " + y);
+    Functions.printInTerminal("x: " + x + ", y: " + y + ", heading:" + getRobotHeading());
   }
 
   public double getRobotX() { return x; }
