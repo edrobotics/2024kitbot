@@ -1,13 +1,6 @@
 package frc.robot;
 
 public class Functions {
-  //Prints text in the terminal
-  //  On the first line the title is written and on the second the value you want to display
-  //  You can skip adding a title, and then only the given value is displayed
-  public static void printInTerminal(Object value, String title) {
-    System.out.println(title);
-    System.out.println(value);
-  }
   public static void printInTerminal(Object value) {
     System.out.println(value);
   }

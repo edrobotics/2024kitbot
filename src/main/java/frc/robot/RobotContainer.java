@@ -37,7 +37,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Simplified: Test all buttons 1-14 every cycle
-    SmartDashboard.putBoolean("Testing", true);
+    //SmartDashboard.putBoolean("Testing", true);
     
     // Try button 4 for up
     /*new Trigger(() -> driver.getHID().getRawButton(4))

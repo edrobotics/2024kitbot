@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 //Commands
-import frc.robot.commands.TankDrive;
 import frc.robot.commands.GTADrive;
+import frc.robot.AutoClasses.AutoPath;
 import frc.robot.commands.Auto;
 import frc.robot.commands.PickUpFuel;
-import frc.robot.commands.IntakeSmartArmsCommand;
+import frc.robot.commands.IntakeArmsCommand;
 import frc.robot.commands.ClimbCommand;
 import frc.robot.commands.DeadReck;
 //Subsystems
@@ -40,14 +40,14 @@ public class Robot extends TimedRobot {
   public static IntakeArms intakeArms = new IntakeArms();
   public static ClimbSubsystem climber = new ClimbSubsystem();
   public static VisionSubsystem vision = new VisionSubsystem();
-  public static IntakeSmartArmsCommand intakeSmartArmsCommand = new IntakeSmartArmsCommand();
-  public static IntakeSmartArmsCommand intakeArmsCommand = new IntakeSmartArmsCommand();
+  public static IntakeArmsCommand intakeSmartArmsCommand = new IntakeArmsCommand();
+  public static IntakeArmsCommand intakeArmsCommand = new IntakeArmsCommand();
   //public static PickUpFuel pickUpFuel = new PickUpFuel();
   public static ClimbCommand climbCommand = new ClimbCommand();
   public static OI m_oi;
 
-  private Command m_autonomousCommand;
-  private Command auto = new Auto();
+  private String[] autoNames = {"FirstAuto", "SecondAuto"};
+  private Auto m_autonomousCommand;
   public static DeadReck deadReck = new DeadReck();
 
   public static boolean driveClimberManually = false;
@@ -60,8 +60,6 @@ public class Robot extends TimedRobot {
   private StructArrayPublisher<Pose3d> arrayPublisher;
 
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
   }
 
   //Called when the robot is started
@@ -69,16 +67,23 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     driveTrain.setDefaultCommand(new GTADrive());
-    //intake.setDefaultCommand(new PickUpFuel());
-    intakeArms.setDefaultCommand(new IntakeSmartArmsCommand());
+    intakeArms.setDefaultCommand(new IntakeArmsCommand());
     climber.setDefaultCommand(new ClimbCommand());
-    //gyroscope.setDefaultCommand(new DeadReck());
 
     publisher = NetworkTableInstance.getDefault()
       .getStructTopic("MyPose", Pose3d.struct).publish();
 
     arrayPublisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
+    
+    SmartDashboard.putNumber("Left motor input", 0);
+    SmartDashboard.putNumber("Right motor input", 0);
+    SmartDashboard.putNumber("Robot x", 0);
+    SmartDashboard.putNumber("Robot y", 0);
+    SmartDashboard.putNumber("Robot heading", 0);
+
+    //Put autos on dashboard
+    SmartDashboard.putStringArray("Auto List", autoNames);
   }
 
   //Runs every 20 ms
@@ -92,6 +97,11 @@ public class Robot extends TimedRobot {
 
     publisher.set(poseA);
     arrayPublisher.set(new Pose3d[] { poseA, poseB });
+
+    SmartDashboard.putNumber("Robot x", deadReck.getRobotX());
+    SmartDashboard.putNumber("Robot y", deadReck.getRobotY());
+    SmartDashboard.putNumber("Robot heading", deadReck.getRobotHeading());
+    SmartDashboard.putNumber("Total moved distance", deadReck.getTotalDistance());
   }
 
   @Override
@@ -103,17 +113,12 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // Only create a PathPlanner command if AutoBuilder was successfully configured
-    /*if (DriveTrain.isAutoBuilderConfigured()) {
-      m_autonomousCommand = new PathPlannerAuto("TestingAuto");
-    } else {
-      SmartDashboard.putString("Auto Status", "AutoBuilder not configured - autonomous disabled");
-      m_autonomousCommand = null;
-    }*/
     m_autonomousCommand = new Auto();
+    String autoName = SmartDashboard.getString("Auto Selector", autoNames[0]);
+    if(autoName == "Select Autonomous ...") { autoName = autoNames[0]; }
+    m_autonomousCommand.setAuto(autoName);
     
-    (new DeadReck()).schedule();
-    // schedule the autonomous command (example)
+    deadReck.schedule();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -130,7 +135,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
-    (new DeadReck()).schedule();
+    deadReck.schedule();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

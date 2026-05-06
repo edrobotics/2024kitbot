@@ -1,59 +1,83 @@
 package frc.robot.commands;
-
+ 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Functions;
 import frc.robot.Robot;
-
+ 
 public class IntakeArmsCommand extends Command {
-    private double targetRotations = Constants.INTAKE_ARMS_TARGET_ROTATIONS;
-    private double speed = Constants.INTAKE_ARMS_DOWN_SPEED;
-    private boolean isRunning = false;
-    private boolean shouldStart = false;
-    private boolean positiveDirection = true; // true for 90 degrees, false for -90 degrees
-    private double startPosition;
-    private double deltaPosition = 0;
-
+    public boolean positiveDirection = false; // true for 90 degrees, false for -90 degrees
+ 
     public IntakeArmsCommand() {
       addRequirements(Robot.intakeArms);
     }
-          
+         
     @Override
     public void initialize() {
+      positiveDirection = false;
     }
-
+ 
     @Override
     public void execute() {
-      boolean buttonIntakeArms = Robot.m_oi.getCopilotIntakeArms();
+      double manualDrive = Robot.m_oi.getCopilotManualIntakeArms();
+      if(Math.abs(manualDrive) > 0.1) {
+        Robot.intakeArms.setLeftIntakeArmsMotor(manualDrive);
+        Robot.intakeArms.setRightIntakeArmsMotor(manualDrive);
+        Robot.driveIntakeArmsManually = true;
+      }
+      else if(Robot.driveIntakeArmsManually) {
+        Robot.intakeArms.setLeftIntakeArmsMotor(0);
+        Robot.intakeArms.setRightIntakeArmsMotor(0);
+      }
       
-      //Sets either positive or negative speed
-      speed = positiveDirection ? -Math.abs(speed) : Math.abs(speed);
-      //Used to know if the intake arm motors will be started during this scheduler run
-      shouldStart = (buttonIntakeArms && !isRunning);
-      if (shouldStart) {
-        isRunning = true;
-        startPosition = Robot.intakeArms.getPosition();
-        deltaPosition = 0;
+      boolean buttonIntakeArms = Robot.m_oi.getCopilotClimber();
+      if(buttonIntakeArms && Robot.driveIntakeArmsManually) {
+        Robot.driveIntakeArmsManually = false;
+        positiveDirection = false;
       }
-      if (isRunning) {
-        deltaPosition = Math.abs(Robot.intakeArms.getPosition()-startPosition);
-        Robot.intakeArms.setIntakeArmsMotors(speed*Constants.INTAKE_ARMS_SPEED_REDUCTION + speed*(targetRotations-deltaPosition)/targetRotations*(1-Constants.INTAKE_ARMS_SPEED_REDUCTION));
-      }
-      //Make so that the motors will stop next time
-      if (deltaPosition >= Math.abs(targetRotations) && ((Robot.intakeArms.getPosition() - startPosition) > 0) == positiveDirection) {
-        isRunning = false;
-        Robot.intakeArms.stopIntakeArmsMotors();
-        positiveDirection = !positiveDirection; // toggle direction for next time
-      }
-    }
+      //if(!Robot.driveIntakeArmsManually) {
+        //double rightPosition = -Robot.intakeArms.getRightPosition();
+        //double leftPosition = Robot.intakeArms.getLeftPosition();
+        //boolean climberIn = Functions.roundToDecimalPlaces(Robot.climber.getWinchPosition(),2) == 0; // returns true when climber arms are retracted
 
+        //if (buttonIntakeArms) {
+          //positiveDirection = false;
+        //}
+
+        /*
+        // makes the intake arms return to zero if climber arms is out
+        if (!climberIn && buttonIntakeArms) {
+          positiveDirection = false;
+        }
+        */
+
+        // toggles the intake arms if climber arms are in
+        
+        /*
+        if (buttonIntakeArms) {
+          positiveDirection = !positiveDirection;
+        }
+        */
+
+        //double targetRotations = positiveDirection ? Constants.INTAKE_ARMS_TARGET_ROTATIONS : 0;
+      
+        //Robot.intakeArms.setRightIntakeArmsMotor(Math.abs(targetRotations - rightPosition) > Constants.INTAKE_ARMS_DEADBAND ? -Constants.INTAKE_ARMS_SPEED * (targetRotations + rightPosition) : 0);
+        //Robot.intakeArms.setLeftIntakeArmsMotor(Math.abs(targetRotations - leftPosition) > Constants.INTAKE_ARMS_DEADBAND ? Constants.INTAKE_ARMS_SPEED * (targetRotations - leftPosition) : 0);
+        
+
+        //Robot.intakeArms.rotateIntakeArms(positiveDirection); // rotates intake arms to either be up (positiveDirection == false) or down (positiveDirection == true)
+      //}
+    }
+    
+ 
     @Override
     public boolean isFinished() {
       return false;
     }
-
+ 
     @Override
     public void end(boolean interrupted) {
       Robot.intakeArms.stopIntakeArmsMotors();
     }
+    
 }

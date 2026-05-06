@@ -7,7 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Robot;
+import frc.robot.AutoClasses.AutoPath;
 import frc.robot.Functions;
+import edu.wpi.first.wpilibj.Filesystem;
+
+import frc.robot.AutoClasses.Waypoint;
 
 public class Auto extends Command {
   public Auto() {
@@ -18,14 +22,50 @@ public class Auto extends Command {
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   int currentWaypoint = 0;
-  Double[][] waypoints = {{1.0,0.0},{-1.0,1.0}};
+  AutoPath chosenAuto;
+  Double[][] waypoints = {{0.0,1.0},{-1.0,1.0},{-1.0,2.0},{0.0,2.0},{0.0,3.0},{-1.0,3.0},{-1.0,4.0}};
 
   private long startTime = System.currentTimeMillis();
   @Override
   public void execute() {
-    if(currentWaypoint < waypoints.length)
+    Functions.printInTerminal(chosenAuto.waypoints.get(currentWaypoint).y);
+    if(currentWaypoint < chosenAuto.length)
+    {
+      Waypoint thisWaypoint = chosenAuto.waypoints.get(currentWaypoint);
+
+      double dist = Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y);
+      double headingToWaypoint = Functions.headingTo(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y);
+      double headingDiff = Functions.angularDifference(headingToWaypoint, Robot.deadReck.getRobotHeading());
+      if(headingDiff > 90)
+      {
+        Robot.driveTrain.setLeftMotors(-1);
+        Robot.driveTrain.setRightMotors(-1+(180-headingDiff)/dist/90);
+      }
+      else if(headingDiff < -90)
+      {
+        Robot.driveTrain.setLeftMotors(-1-(-180-headingDiff)/dist/90);
+        Robot.driveTrain.setRightMotors(-1);
+      }
+      else if(headingDiff < 0)
+      {
+        Robot.driveTrain.setLeftMotors(1+headingDiff/dist/90);
+        Robot.driveTrain.setRightMotors(1);
+      }
+      else
+      {
+        Robot.driveTrain.setLeftMotors(1);
+        Robot.driveTrain.setRightMotors(1-headingDiff/dist/90);
+      }
+      if(Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y) < 0.2) { currentWaypoint++; }
+    }
+    else
+    {
+      Robot.driveTrain.setLeftMotors(0);
+      Robot.driveTrain.setRightMotors(0);
+    }
+
+    /*if(currentWaypoint < waypoints.length)
     {
       double dist = Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), waypoints[currentWaypoint][0], waypoints[currentWaypoint][1]);
       double headingToWaypoint = Functions.headingTo(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), waypoints[currentWaypoint][0], waypoints[currentWaypoint][1]);
@@ -33,22 +73,22 @@ public class Auto extends Command {
       if(headingDiff > 90)
       {
         Robot.driveTrain.setLeftMotors(-1);
-        Robot.driveTrain.setRightMotors(-1+(180-headingDiff)/dist/45);
+        Robot.driveTrain.setRightMotors(-1+(180-headingDiff)/dist/90);
       }
       else if(headingDiff < -90)
       {
-        Robot.driveTrain.setLeftMotors(-1-(-180-headingDiff)/dist/45);
+        Robot.driveTrain.setLeftMotors(-1-(-180-headingDiff)/dist/90);
         Robot.driveTrain.setRightMotors(-1);
       }
       else if(headingDiff < 0)
       {
-        Robot.driveTrain.setLeftMotors(1+headingDiff/dist/45);
+        Robot.driveTrain.setLeftMotors(1+headingDiff/dist/90);
         Robot.driveTrain.setRightMotors(1);
       }
       else
       {
         Robot.driveTrain.setLeftMotors(1);
-        Robot.driveTrain.setRightMotors(1-headingDiff/dist/45);
+        Robot.driveTrain.setRightMotors(1-headingDiff/dist/90);
       }
       if(Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), waypoints[currentWaypoint][0], waypoints[currentWaypoint][1]) < 0.2) { currentWaypoint++; }
     }
@@ -56,7 +96,7 @@ public class Auto extends Command {
     {
       Robot.driveTrain.setLeftMotors(0);
       Robot.driveTrain.setRightMotors(0);
-    }
+    }*/
   }
 
   // Called once the command ends or is interrupted.
@@ -72,5 +112,9 @@ public class Auto extends Command {
   public long getAutoTime()
   {
     return System.currentTimeMillis()-startTime;
+  }
+
+  public void setAuto(String name) {
+    chosenAuto = new AutoPath(name);
   }
 }

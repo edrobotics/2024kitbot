@@ -1,21 +1,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants;
 import frc.robot.Functions;
 import frc.robot.Robot;
 
 public class DeadReck extends Command {
-  public DeadReck () {}
+  public DeadReck () {
+    x = 0;
+    y = 0;
+    totalMovedDistance = 0;
+  }
 
   private double x;
   private double y;
+  private double totalMovedDistance;
   private double lastLeftPosition;
   private double lastRightPosition;
 
   public void initialize () {
-    x = 0;
-    y = 0;
     lastLeftPosition = Robot.driveTrain.getLeftPosition();
     lastRightPosition = Robot.driveTrain.getRightPosition();
     Robot.gyroscope.resetHeading();
@@ -31,17 +36,17 @@ public class DeadReck extends Command {
 
     double deltaForwardPosition = (deltaLeftPosition + deltaRightPosition) / 2;
 
+    totalMovedDistance += Math.abs(deltaForwardPosition);
     x += deltaForwardPosition * Math.sin(radians);
     y += deltaForwardPosition * Math.cos(radians);
 
     lastLeftPosition = currentLeftPosition;
     lastRightPosition = currentRightPosition;
-
-    Functions.printInTerminal("x: " + x + ", y: " + y + ", heading:" + getRobotHeading());
   }
 
   public double getRobotX() { return x; }
   public double getRobotY() { return y; }
   public double getRobotHeading() { return Robot.gyroscope.getYaw(); }
+  public double getTotalDistance() { return totalMovedDistance; }
 }
 
