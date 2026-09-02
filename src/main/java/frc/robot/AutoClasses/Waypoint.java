@@ -4,10 +4,8 @@ public class Waypoint {
   public double x;
   public double y;
   public double speed;
+  public Double turnTo; //When "Double" is capitalized, its value can be null
+  public double intakeSpeed;
 
-  public Waypoint(double waypointX, double waypointY, double waypointSpeed) {
-    x = waypointX;
-    y = waypointY;
-    speed = waypointSpeed;
-  }
+  public Waypoint() {}
 }

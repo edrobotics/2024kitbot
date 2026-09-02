@@ -17,10 +17,11 @@ public class PickUpFuel extends Command {
 
   @Override
   public void execute() {
-    boolean intakeIn  = Robot.m_oi.getCopilotIntakeIn();
-    boolean intakeOut = Robot.m_oi.getCopilotIntakeOut();
+    double intakeSpeed = Robot.m_oi.getCopilotIntake();
+    /*boolean intakeIn  = Robot.m_oi.getCopilotIntakeIn();
+    boolean intakeOut = Robot.m_oi.getCopilotIntakeOut();*/
     // XOR: if both pressed at once, do nothing; otherwise run in the appropriate direction
-    Robot.intake.setIntakeMotor((intakeIn ^ intakeOut ? (intakeIn ? 1 : -1) : 0));
+    Robot.intake.setIntakeMotor(intakeSpeed);
   }
 
   @Override

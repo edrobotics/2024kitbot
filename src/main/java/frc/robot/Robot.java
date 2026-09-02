@@ -67,8 +67,9 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
     driveTrain.setDefaultCommand(new GTADrive());
-    intakeArms.setDefaultCommand(new IntakeArmsCommand());
+    //intakeArms.setDefaultCommand(new IntakeArmsCommand());
     climber.setDefaultCommand(new ClimbCommand());
+    intake.setDefaultCommand(new PickUpFuel());
 
     publisher = NetworkTableInstance.getDefault()
       .getStructTopic("MyPose", Pose3d.struct).publish();
@@ -102,6 +103,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Robot y", deadReck.getRobotY());
     SmartDashboard.putNumber("Robot heading", deadReck.getRobotHeading());
     SmartDashboard.putNumber("Total moved distance", deadReck.getTotalDistance());
+
   }
 
   @Override
@@ -114,9 +116,9 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = new Auto();
-    String autoName = SmartDashboard.getString("Auto Selector", autoNames[0]);
+    /*String autoName = SmartDashboard.getString("Auto Selector", autoNames[0]);
     if(autoName == "Select Autonomous ...") { autoName = autoNames[0]; }
-    m_autonomousCommand.setAuto(autoName);
+    m_autonomousCommand.setAuto(autoName);*/
     
     deadReck.schedule();
     if (m_autonomousCommand != null) {

@@ -66,12 +66,21 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {}
 
+  public void setRawMotorInputs(double leftSpeed, double rightSpeed) {
+    leftMotor1.set(leftSpeed);
+    leftMotor2.set(leftSpeed);
+    SmartDashboard.putNumber("Left motor input", Functions.clamp(leftSpeed));
+    rightMotor1.set(rightSpeed);
+    rightMotor2.set(rightSpeed);
+    SmartDashboard.putNumber("Right motor input", Functions.clamp(rightSpeed));
+  }
+
   /** Sets the left side speed [-1, 1] after applying the global speed reduction. */
   public void setLeftMotors(double speed) {
     speed = Functions.clamp(speed);
     leftMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
     leftMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    SmartDashboard.putNumber("Left motor input", Functions.clamp(speed));
+    SmartDashboard.putNumber("Left motor input", Functions.clamp(speed)*Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   /** Sets the right side speed [-1, 1] after applying the global speed reduction. */
@@ -79,7 +88,7 @@ public class DriveTrain extends SubsystemBase {
     speed = Functions.clamp(speed);
     rightMotor1.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
     rightMotor2.set(speed * Constants.DRIVETRAIN_SPEED_REDUCTION);
-    SmartDashboard.putNumber("Right motor input", Functions.clamp(speed));
+    SmartDashboard.putNumber("Right motor input", Functions.clamp(speed)*Constants.DRIVETRAIN_SPEED_REDUCTION);
   }
 
   public void setLeftMotorsBoosted(double speed) {

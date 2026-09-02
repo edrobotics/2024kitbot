@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,7 +30,25 @@ public class AutoPath {
       JsonNode waypointsNode = rootNode.path("waypoints");
       if(waypointsNode.isArray()) {
         for(JsonNode thisWaypointNode : waypointsNode) {
-          Waypoint thisWaypoint = new Waypoint(thisWaypointNode.path("x").asDouble(), thisWaypointNode.path("y").asDouble(), thisWaypointNode.path("speed").asDouble());
+          //Waypoint thisWaypoint = new Waypoint(thisWaypointNode.path("x").asDouble(), thisWaypointNode.path("y").asDouble(), thisWaypointNode.path("speed").asDouble());
+          Waypoint thisWaypoint = new Waypoint();
+
+          thisWaypoint.x = thisWaypointNode.path("x").asDouble();
+          thisWaypoint.y = thisWaypointNode.path("y").asDouble();
+          thisWaypoint.speed = thisWaypointNode.path("speed").asDouble();
+          if(thisWaypointNode.path("turnTo").isMissingNode()) {
+            thisWaypoint.turnTo = null;
+          }
+          else {
+            thisWaypoint.turnTo = thisWaypointNode.path("turnTo").asDouble();
+          }
+          if(thisWaypointNode.path("intakeSpeed").isMissingNode()) {
+            thisWaypoint.intakeSpeed = 0;
+          }
+          else {
+            thisWaypoint.turnTo = thisWaypointNode.path("intakeSpeed").asDouble();
+          }
+
           waypoints.add(thisWaypoint);
           length++;
         }

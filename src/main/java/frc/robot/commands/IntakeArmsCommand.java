@@ -19,7 +19,7 @@ public class IntakeArmsCommand extends Command {
  
     @Override
     public void execute() {
-      double manualDrive = Robot.m_oi.getCopilotManualIntakeArms();
+      /*double manualDrive = Robot.m_oi.getCopilotManualIntakeArms();
       if(Math.abs(manualDrive) > 0.1) {
         Robot.intakeArms.setLeftIntakeArmsMotor(manualDrive);
         Robot.intakeArms.setRightIntakeArmsMotor(manualDrive);
@@ -34,7 +34,7 @@ public class IntakeArmsCommand extends Command {
       if(buttonIntakeArms && Robot.driveIntakeArmsManually) {
         Robot.driveIntakeArmsManually = false;
         positiveDirection = false;
-      }
+      }*/
       //if(!Robot.driveIntakeArmsManually) {
         //double rightPosition = -Robot.intakeArms.getRightPosition();
         //double leftPosition = Robot.intakeArms.getLeftPosition();

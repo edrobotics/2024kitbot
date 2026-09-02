@@ -137,6 +137,24 @@ public class OI {
 
   // ── Copilot (operator) semantic inputs ──────────────────────────────────
 
+  public double getCopilotIntake() {
+    if(copilotType == Constants.ControllerType.PS4) {
+      double stick = getCopilotRawAxis(Constants.ps4_rightStickY);
+      return Math.abs(stick) < 0.2 ? 0 : Math.signum(stick);
+    }
+    else if(copilotType == Constants.ControllerType.LOGITECH) {
+      double stick = getCopilotRawAxis(Constants.logitech_rightStickY);
+      return Math.abs(stick) < 0.2 ? 0 : Math.signum(stick);
+    }
+    else if(copilotType == Constants.ControllerType.XBOX) {
+      double stick = getCopilotRawAxis(Constants.xbox_rightStickY);
+      return Math.abs(stick) < 0.2 ? 0 : Math.signum(stick);
+    }
+    else {
+      Functions.printInTerminal("Copilot controller type not supported");
+      return 0;
+    }
+  }
   /** Intake-in button. PS4: Circle. Logitech: B. */
   public boolean getCopilotIntakeIn() {
     if(copilotType == Constants.ControllerType.PS4) {
@@ -153,7 +171,6 @@ public class OI {
       return false;
     }
   }
-
   /** Intake-out button. PS4: Square. Logitech: X. */
   public boolean getCopilotIntakeOut() {
     if(copilotType == Constants.ControllerType.PS4) {
@@ -171,8 +188,12 @@ public class OI {
     }
   }
 
+  public double getCopilotIntakeArms() {
+      double stick = getCopilotRawAxis(Constants.xbox_leftStickY);
+      return Math.abs(stick) < 0.2 ? 0 : Math.signum(stick);
+  }
   /** Intake arms toggle button. PS4: Triangle. Logitech: Y. */
-  private boolean intakeArmWasPressed = false;
+  /*private boolean intakeArmWasPressed = false;
   public boolean getCopilotIntakeArms() {
     if(copilotType == Constants.ControllerType.PS4) {
       boolean returnValue = !intakeArmWasPressed && getCopilotRawButton(Constants.ps4_buttonCircle);
@@ -193,7 +214,7 @@ public class OI {
       Functions.printInTerminal("Copilot controller type not supported");
       return false;
     }
-  }
+  }*/
 
   public double getCopilotManualIntakeArms() {
     if(copilotType == Constants.ControllerType.PS4) {
@@ -236,13 +257,13 @@ public class OI {
 
   public double getCopilotManualClimber() {
     if(copilotType == Constants.ControllerType.PS4) {
-      return getCopilotRawAxis(Constants.ps4_rightStickY);
+      return getCopilotRawAxis(Constants.ps4_leftStickY);
     }
     else if(copilotType == Constants.ControllerType.LOGITECH) {
-      return getCopilotRawAxis(Constants.logitech_rightStickY);
+      return getCopilotRawAxis(Constants.logitech_leftStickY);
     }
     else if(copilotType == Constants.ControllerType.XBOX) {
-      return getCopilotRawAxis(Constants.xbox_rightStickY);
+      return getCopilotRawAxis(Constants.xbox_leftStickY);
     }
     else {
       Functions.printInTerminal("Copilot controller type not supported");

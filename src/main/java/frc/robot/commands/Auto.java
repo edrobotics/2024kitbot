@@ -23,41 +23,51 @@ public class Auto extends Command {
   public void initialize() {}
 
   int currentWaypoint = 0;
-  AutoPath chosenAuto;
+  AutoPath chosenAuto = new AutoPath("FirstAuto");
   Double[][] waypoints = {{0.0,1.0},{-1.0,1.0},{-1.0,2.0},{0.0,2.0},{0.0,3.0},{-1.0,3.0},{-1.0,4.0}};
 
   private long startTime = System.currentTimeMillis();
   @Override
   public void execute() {
-    Functions.printInTerminal(chosenAuto.waypoints.get(currentWaypoint).y);
     if(currentWaypoint < chosenAuto.length)
     {
       Waypoint thisWaypoint = chosenAuto.waypoints.get(currentWaypoint);
+      Double drivetrainSpeed = Math.abs(chosenAuto.speed * thisWaypoint.speed);
 
       double dist = Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y);
       double headingToWaypoint = Functions.headingTo(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y);
       double headingDiff = Functions.angularDifference(headingToWaypoint, Robot.deadReck.getRobotHeading());
-      if(headingDiff > 90)
+
+      if(dist > 0.2)
       {
-        Robot.driveTrain.setLeftMotors(-1);
-        Robot.driveTrain.setRightMotors(-1+(180-headingDiff)/dist/90);
+        if(headingDiff > 90)
+        {
+          Robot.driveTrain.setLeftMotors(-1);
+          Robot.driveTrain.setRightMotors(-1+(180-headingDiff)/dist/90);
+        }
+        else if(headingDiff < -90)
+        {
+          Robot.driveTrain.setLeftMotors(-1-(-180-headingDiff)/dist/90);
+          Robot.driveTrain.setRightMotors(-1);
+        }
+        else if(headingDiff < 0)
+        {
+          Robot.driveTrain.setLeftMotors(1+headingDiff/dist/90);
+          Robot.driveTrain.setRightMotors(1);
+        }
+        else
+        {
+          Robot.driveTrain.setLeftMotors(1);
+          Robot.driveTrain.setRightMotors(1-headingDiff/dist/90);
+        }
       }
-      else if(headingDiff < -90)
-      {
-        Robot.driveTrain.setLeftMotors(-1-(-180-headingDiff)/dist/90);
-        Robot.driveTrain.setRightMotors(-1);
+      else {
+        if(thisWaypoint.turnTo == null || Math.abs(Functions.angularDifference(Robot.deadReck.getRobotHeading(), thisWaypoint.turnTo)) < 5) { currentWaypoint++; }
+        else {
+          Robot.driveTrain.setLeftMotors(0.5*Math.signum(Functions.angularDifference(Robot.deadReck.getRobotHeading(), thisWaypoint.turnTo))); //1 or -1
+          Robot.driveTrain.setLeftMotors(0.5*-Math.signum(Functions.angularDifference(Robot.deadReck.getRobotHeading(), thisWaypoint.turnTo)));
+        }
       }
-      else if(headingDiff < 0)
-      {
-        Robot.driveTrain.setLeftMotors(1+headingDiff/dist/90);
-        Robot.driveTrain.setRightMotors(1);
-      }
-      else
-      {
-        Robot.driveTrain.setLeftMotors(1);
-        Robot.driveTrain.setRightMotors(1-headingDiff/dist/90);
-      }
-      if(Functions.pythagoranTheorem(Robot.deadReck.getRobotX(), Robot.deadReck.getRobotY(), thisWaypoint.x, thisWaypoint.y) < 0.2) { currentWaypoint++; }
     }
     else
     {
@@ -101,7 +111,10 @@ public class Auto extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Robot.driveTrain.stop();
+    Robot.intake.setIntakeMotor(0);
+  }
 
   // Returns true when the command should end.
   @Override

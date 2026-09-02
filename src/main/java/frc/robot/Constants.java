@@ -14,6 +14,24 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class Drivetrain {
+    //Motor ids
+    public static final int leftMotor1Id = 1;
+    public static final int leftMotor2Id = 2;
+    public static final int rightMotor1Id = 3;
+    public static final int rightMotor2Id = 4;
+    public static final double speedReduction = 0.2;
+    public static final double inputDeadband = 0.1;
+    //For encoders
+    public static final double gearing = 9.13;
+    public static final double wheelCircumference = Units.inchesToMeters(6.0)*Math.PI; //In meters
+    public static final double positionConversion = wheelCircumference/gearing;
+    public static final double velocityConversion = positionConversion/60; //rpm to m/s
+    //For smooth driving
+    public static final double minInput = 0.3;
+    public static final double maxInputAt = 0.5;
+  }
+
   //Drivetrain
   public static final int LMOTOR1ID = 1;
   public static final int LMOTOR2ID = 2;
@@ -45,11 +63,6 @@ public final class Constants {
   public static final double MAX_ANGULAR_ACCELERATION_RAD = Math.PI;
   public static final long AUTO_DRIVE_TIME_MS = 3000; // how long to drive forward in auto
   public static final double AUTO_DRIVE_SPEED = 0.1; // motor speed during auto drive
-
-  //Working auto
-  public static final double AUTO_TURN_SPEED = 0.5; // maximum turning speed during auto
-  public static final long AUTO_TIME = 20000; // in milliseconds
-  public static final long AUTO_ANGULAR_DEADBAND = 5;
 
   //Intake
   public static final int intakeMotorId = 5;
@@ -88,6 +101,30 @@ public final class Constants {
   //Controller
   public static final int CONTROL_PILOT_ID = 0;
   public static final int CONTROL_COPILOT_ID = 1;
+
+  public static class PS4 {
+    public static final int leftStickX = 0;
+    public static final int leftStickY = 1;
+    public static final int rightStickX = 2;
+    public static final int leftTrigger = 3;
+    public static final int rightTrigger = 4;
+    public static final int rightStickY = 5;
+    
+    public static final int buttonSquare = 1;
+    public static final int buttonX = 2;
+    public static final int buttonCircle = 3;
+    public static final int buttonTriangle = 4;
+    public static final int buttonL1 = 5;
+    public static final int buttonR1 = 6;
+    public static final int buttonL2 = 7;
+    public static final int buttonR2 = 8;
+    public static final int buttonShare = 9;
+    public static final int buttonOptions = 10;
+    public static final int buttonLeftStick = 11;
+    public static final int buttonRightStick = 12;
+    public static final int buttonPS = 13;
+    public static final int buttonTouchpad = 14;
+  }
 
   //For a ps4 controller:
   public static final int ps4_leftStickX = 0;
@@ -133,6 +170,26 @@ public final class Constants {
   public static final int logitech_buttonStart = 10;
   public static final int logitech_buttonLeftStick = 11;
   public static final int logitech_buttonRightStick = 12;
+
+  public static class logitech {
+    public static final int leftStickX = 0;
+    public static final int leftStickY = 1;
+    public static final int rightStickX = 2;
+    public static final int rightStickY = 3;
+
+    public static final int buttonX = 1;
+    public static final int buttonA = 2;
+    public static final int buttonB = 3;
+    public static final int buttonY = 4;
+    public static final int buttonLB = 5;
+    public static final int buttonRB = 6;
+    public static final int buttonLT = 7;
+    public static final int buttonRT = 8;
+    public static final int buttonBack = 9;
+    public static final int buttonStart = 10;
+    public static final int buttonLeftStick = 11;
+    public static final int buttonRightStick = 12;
+  }
 
   //For an Xbox controller
   // The logitech controllers can be turned into an xbox with a switch on the lower side. D=logitech, X=xbox
